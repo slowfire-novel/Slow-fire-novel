@@ -176,8 +176,9 @@ html[lang="zh-CN"] .body p { text-align: justify; }
   var MAGNAME = ['Nov/Dec 2046 issue', 'The Sixty-Seven', 'Jan/Feb 2065 issue'];
   // Chinese-only companion works; each shows only if toc.json lists it
   var WORKS = [
-    { key: 'fh', tag: { zh: '前传', en: 'Prequel' }, k: '前',
-      en: 'Summer 2035 to spring 2045: the county system\'s update log, and the night notes the Steward wrote for itself.' },
+    { key: 'fh', tag: { zh: '前传', en: 'Prequel' }, k: '前', notes: true,
+      zhMore: '可以打开注释，共三十六条。',
+      en: 'Summer 2035 to spring 2045: the county system\'s update log, and the night notes the Steward wrote for itself. Thirty-six notes for readers new to the series can be switched on.' },
     { key: 'ly', tag: { zh: '外传', en: 'Side Story' },
       en: 'Autumn 2026 to summer 2035, the nine years later called "the AI Wild West", told as a storyteller\'s popular history in fifteen chapters.' },
     { key: 'mh', tag: { zh: '通俗卷', en: 'Popular Volume' },
@@ -204,7 +205,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       var t = toc[w.key];
       if (!t) return;
       if (!t.parts) {
-        p.push({ id: w.key, work: w.key, langs: ['zh'], title: function () { return t.zh; }, crumb: function (l) { return w.tag[l]; }, k: w.k });
+        p.push({ id: w.key, work: w.key, langs: ['zh'], title: function () { return t.zh; }, crumb: function (l) { return w.tag[l]; }, k: w.k, notes: !!w.notes });
         return;
       }
       t.parts.forEach(function (c) {
@@ -293,7 +294,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       var t = toc[w.key];
       if (!t) return;
       h += '<section class="part"><h2><span class="tag">' + w.tag[lang] + '</span>' + esc(t.zh) + '</h2><p>' +
-        esc(zh ? t.desc.replace(/^《阴燃》[^。]*。/, '') : w.en + ' Chinese only.') + '</p>';
+        esc(zh ? t.desc.replace(/^《阴燃》[^。]*。/, '') + (w.zhMore || '') : w.en + ' Chinese only.') + '</p>';
       if (t.parts) {
         h += '<ol class="chapters">';
         P.forEach(function (p) { if (p.work === w.key) h += '<li><a href="#' + p.id + '"><span class="k">' + p.k + '</span><span class="t">' + esc(p.short()) + '</span></a></li>'; });
