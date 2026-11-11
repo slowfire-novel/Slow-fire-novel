@@ -182,9 +182,11 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     { key: 'ly', tag: { zh: '外传', en: 'Side Story' },
       en: 'Autumn 2026 to summer 2035, the nine years later called "the AI Wild West", told as a storyteller\'s popular history in fifteen chapters.' },
     { key: 'mh', tag: { zh: '通俗卷', en: 'Popular Volume' },
-      en: 'Tippecanoe County, 2051: the fight over Calloway\'s will, the lawsuit his biography dismisses in a single line. Seventeen chapters.' }
+      en: 'Tippecanoe County, 2051: the fight over Calloway\'s will, the lawsuit his biography dismisses in a single line. Seventeen chapters.' },
+    { key: 'hd', tag: { zh: '外一种', en: 'Companion Tale' },
+      en: 'The plague years, 2033 to 2035: one man, a pair of glasses, and the chaos he used to tip half the world. Thirteen chapters.' }
   ];
-  function partKey(c, n) { return c.zh === '尾声' ? '尾' : n === 0 ? '楔' : pad(n); }
+  function partKey(c, n) { return c.k || (c.zh === '尾声' ? '尾' : n === 0 ? '楔' : pad(n)); }
   function partShort(t) { return t.replace(/^第[0-9一二三四五六七八九十]+[回章]　/, ''); }
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
