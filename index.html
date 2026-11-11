@@ -108,6 +108,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
 .body ul, .body ol { padding-left: 1.4em; margin: 0 0 1.1em; }
 .body figure { margin: 2rem 0; }
 .body figure img { display: block; width: 100%; height: auto; border-radius: 3px; background: #fff; }
+.body figcaption { margin-top: .55rem; font-size: 13px; line-height: 1.6; color: var(--muted); text-align: center; }
 .tablewrap { overflow-x: auto; margin: 1.4rem 0; border: 1px solid var(--rule); border-radius: 3px; }
 .body table { border-collapse: collapse; font-size: 14px; line-height: 1.55; min-width: 100%; }
 .body th, .body td { text-align: left; vertical-align: top; padding: .5rem .7rem; border-bottom: 1px solid var(--rule); }
@@ -173,6 +174,17 @@ html[lang="zh-CN"] .body p { text-align: justify; }
   };
   var VOL = { v1: { zh: '阴燃', en: 'The Slow Fire' }, v2: { zh: '余烬', en: 'Embers' } };
   var MAGNAME = ['Nov/Dec 2046 issue', 'The Sixty-Seven', 'Jan/Feb 2065 issue'];
+  // Chinese-only companion works; each shows only if toc.json lists it
+  var WORKS = [
+    { key: 'fh', tag: { zh: '前传', en: 'Prequel' }, k: '前',
+      en: 'Summer 2035 to spring 2045: the county system\'s update log, and the night notes the Steward wrote for itself.' },
+    { key: 'ly', tag: { zh: '外传', en: 'Side Story' },
+      en: 'Autumn 2026 to summer 2035, the nine years later called "the AI Wild West", told as a storyteller\'s popular history in fifteen chapters.' },
+    { key: 'mh', tag: { zh: '通俗卷', en: 'Popular Volume' },
+      en: 'Tippecanoe County, 2051: the fight over Calloway\'s will, the lawsuit his biography dismisses in a single line. Seventeen chapters.' }
+  ];
+  function partKey(c, n) { return c.zh === '尾声' ? '尾' : n === 0 ? '楔' : pad(n); }
+  function partShort(t) { return t.replace(/^第[0-9一二三四五六七八九十]+[回章]　/, ''); }
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -188,6 +200,18 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       });
     });
     p.push({ id: 'jx', langs: ['zh'], title: function () { return '焦线'; }, crumb: function (l) { return L[l].seq + (l === 'en' ? ' · Focal Line' : ''); }, k: '续', notes: true });
+    WORKS.forEach(function (w) {
+      var t = toc[w.key];
+      if (!t) return;
+      if (!t.parts) {
+        p.push({ id: w.key, work: w.key, langs: ['zh'], title: function () { return t.zh; }, crumb: function (l) { return w.tag[l]; }, k: w.k });
+        return;
+      }
+      t.parts.forEach(function (c) {
+        p.push({ id: w.key + '-' + pad(c.n), work: w.key, langs: ['zh'], title: function () { return c.zh; }, short: function () { return partShort(c.zh); },
+          crumb: function (l) { return w.tag[l] + ' · ' + t.zh + (c.juan ? ' · ' + c.juan.replace(/（.*$/, '') : ''); }, k: partKey(c, c.n) });
+      });
+    });
     p.push({ id: 'guide', langs: ['zh'], title: function () { return toc.guide; }, crumb: function (l) { return L[l].guide; }, k: '导' });
     toc.mag.forEach(function (m, i) {
       p.push({ id: 'mag-' + m.n, langs: ['en'], title: function () { return m.en; }, short: function () { return MAGNAME[i]; },
@@ -211,7 +235,14 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       P.forEach(function (p) { if (p.vol === v) h += item(p, cur); });
       h += '</ol>';
     });
-    h += '<h3>' + L[lang].seq + ' · ' + L[lang].guide + '</h3><ol>' + item(P[find('jx')], cur) + item(P[find('guide')], cur) + '</ol>';
+    h += '<h3>' + L[lang].seq + '</h3><ol>' + item(P[find('jx')], cur) + '</ol>';
+    WORKS.forEach(function (w) {
+      if (!toc[w.key]) return;
+      h += '<h3>' + w.tag[lang] + ' · ' + toc[w.key].zh + '</h3><ol>';
+      P.forEach(function (p) { if (p.work === w.key) h += item(p, cur); });
+      h += '</ol>';
+    });
+    h += '<h3>' + L[lang].guide + '</h3><ol>' + item(P[find('guide')], cur) + '</ol>';
     h += '<h3>' + L[lang].mag + ' · Second Look</h3><ol>';
     P.forEach(function (p) { if (p.mag) h += item(p, cur); });
     h += '</ol>';
@@ -243,8 +274,8 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
     var zh = lang === 'zh';
     var h = '<div class="col">' + controls(null) + '<section class="hero"><h1>阴燃</h1><p class="en-title">The Slow Fire</p><div class="focal" aria-hidden="true"></div>';
-    h += zh ? '<p class="lede">一部写记忆的科幻小说。二〇四五年，印第安纳州的一个县，电不够用，每天夜里要把人眼镜里的个人助手压缩一遍：留什么，删什么，谁说了算。两卷四十四章，中英两种文字；另有一部写在十九年后的续篇。</p>'
-           : '<p class="lede">A science-fiction novel about memory. In 2045 an Indiana county runs short of power, and every night the personal assistants in people\'s glasses are compressed: what is kept, what is cut, and who decides. Two volumes, forty-four chapters, in Chinese and English, and a sequel set nineteen years later.</p>';
+    h += zh ? '<p class="lede">一部写记忆的科幻小说。二〇四五年，印第安纳州的一个县，电不够用，每天夜里要把人眼镜里的个人助手压缩一遍：留什么，删什么，谁说了算。两卷四十四章，中英两种文字；另有写在十九年后的续篇《焦线》，以及同一个世界里的' + WORKS.filter(function (w) { return toc[w.key]; }).map(function (w) { return w.tag.zh + '《' + toc[w.key].zh + '》'; }).join('、') + '。</p>'
+           : '<p class="lede">A science-fiction novel about memory. In 2045 an Indiana county runs short of power, and every night the personal assistants in people\'s glasses are compressed: what is kept, what is cut, and who decides. Two volumes, forty-four chapters, in Chinese and English, and a sequel set nineteen years later, plus further works from the same world in Chinese: ' + WORKS.filter(function (w) { return toc[w.key]; }).map(function (w) { return 'a ' + w.tag.en.toLowerCase() + ' (' + toc[w.key].zh + ')'; }).join(', ') + '.</p>';
     h += zh ? '<p class="made">本书由一位作者与AI合写。主意和取舍是人的，句子大多由机器起草；哪些出自谁手，《导读》末尾的<a href="#afterword">跋</a>里有交代。<a href="#preface">序</a>是全书唯一完全由人写成的部分。</p>'
            : '<p class="made">Written by one author with an AI. The ideas and choices are human; most sentences were drafted by the machine. Who did what is set out in the <a href="#afterword">afterword</a> to the Reader\'s Guide (Chinese). The <a href="#preface">preface</a> is the only part written entirely by hand.</p>';
     h += '</section><div class="ledger">';
@@ -258,6 +289,20 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     h += '<section class="part"><h2><span class="tag">' + L[lang].seq + '</span>焦线<span class="alt">Focal Line</span></h2><p>' +
       (zh ? '二〇六四年秋，一份按时间排列的订阅源：帆到了太阳的焦线，比邻星 b 的第一张照片上，有一块白在放地球。可以打开注释，给没读过前两卷的读者。' : 'Autumn 2064, told as a news feed: the sail reaches the Sun\'s focal line, and on the first picture of Proxima b a white patch is playing back the Earth. Chinese only. Notes for readers new to the series can be switched on.') +
       '</p><div class="single"><a href="#jx">' + (zh ? '读《焦线》' : 'Read 焦线 (Chinese)') + '</a></div></section>';
+    WORKS.forEach(function (w) {
+      var t = toc[w.key];
+      if (!t) return;
+      h += '<section class="part"><h2><span class="tag">' + w.tag[lang] + '</span>' + esc(t.zh) + '</h2><p>' +
+        esc(zh ? t.desc.replace(/^《阴燃》[^。]*。/, '') : w.en + ' Chinese only.') + '</p>';
+      if (t.parts) {
+        h += '<ol class="chapters">';
+        P.forEach(function (p) { if (p.work === w.key) h += '<li><a href="#' + p.id + '"><span class="k">' + p.k + '</span><span class="t">' + esc(p.short()) + '</span></a></li>'; });
+        h += '</ol>';
+      } else {
+        h += '<div class="single"><a href="#' + w.key + '">' + (zh ? '读《' + esc(t.zh) + '》' : 'Read ' + esc(t.zh) + ' (Chinese)') + '</a></div>';
+      }
+      h += '</section>';
+    });
     h += '<section class="part"><h2><span class="tag">' + L[lang].guide + '</span>' + esc(toc.guide) + '</h2><p>' +
       (zh ? '写给读完两卷的读者：世界怎么运转，几根埋得深的线，四十四章一览，以及跋：谁想的，谁写的。' : 'For readers who have finished both volumes: how the world works, the threads buried deepest, a table of all 44 chapters, and an afterword on who thought of what. Chinese only.') +
       '</p><div class="single"><a href="#guide">' + (zh ? '读导读' : 'Read the guide (Chinese)') + '</a></div></section>';
