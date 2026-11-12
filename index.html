@@ -249,6 +249,13 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     h += '<h3>' + L[lang].mag + ' · Second Look</h3><ol>';
     P.forEach(function (p) { if (p.mag) h += item(p, cur); });
     h += '</ol>';
+    h += '<h3>' + (lang === 'zh' ? '随笔 · 人比AI更像AI' : 'Essays · Humans Are More AI Than AI') + '</h3><ol>';
+    [['essays/benchmark.html', '跑', lang === 'zh' ? '跑分报告（中英）' : 'Benchmark report'],
+     ['essays/standup-zh.html', '秀', lang === 'zh' ? '脱口秀版' : 'Stand-up (Chinese)'],
+     ['essays/standup-en.html', 'S', lang === 'zh' ? 'Stand-Up Edition（英文）' : 'Stand-Up Edition']].forEach(function (e) {
+      h += '<li><a href="' + e[0] + '"><span class="k">' + e[1] + '</span><span>' + esc(e[2]) + '</span></a></li>';
+    });
+    h += '</ol>';
     document.getElementById('rail').innerHTML = h;
   }
   function label(p) {
