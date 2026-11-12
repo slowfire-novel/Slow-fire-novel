@@ -313,7 +313,14 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       (zh ? '书中世界的一本学生工程杂志，两期（二〇四六年、二〇六五年），加一份读者评选的六十七篇论文。杂志和作者都是虚构的；那六十七篇论文是真的。仅英文。' : 'Two issues of an engineering students\' magazine from inside the novel (2046 and 2065), plus a readers\' list of sixty-seven papers. The magazine and its writers are fiction; the sixty-seven papers are real and cited as published.') +
       '</p><div class="single">';
     P.forEach(function (p) { if (p.mag) h += '<a href="#' + p.id + '">' + esc(p.short('en')) + '</a>'; });
-    h += '</div></section></div></div>';
+    h += '</div></section>';
+    h += '<section class="part"><h2><span class="tag">' + (zh ? '随笔' : 'Essays') + '</span>人比AI更像AI<span class="alt">Humans Are More AI Than AI</span></h2><p>' +
+      (zh ? '同一位作者和同一个 AI：把人类给 AI 列的十五条毛病拿来给人自己跑一遍分，再改成一场脱口秀。每一段都标了“有多少是 AI 的”，打开光谱就能看到。'
+          : 'The same author and the same AI: the fifteen flaws people list for AI, run as a benchmark on people themselves, then rewritten as a stand-up show. Every paragraph is scored for how much of it is the AI\'s; switch on the spectrum to see it.') +
+      '</p><div class="single"><a href="essays/benchmark.html">' + (zh ? '跑分报告（中文 · English）' : 'Benchmark report (Chinese · English)') + '</a>' +
+      '<a href="essays/standup-zh.html">' + (zh ? '脱口秀版（中文）' : 'Stand-up edition (Chinese)') + '</a>' +
+      '<a href="essays/standup-en.html">' + (zh ? 'Stand-Up Edition（英文）' : 'Stand-Up Edition (English)') + '</a></div></section>';
+    h += '</div></div>';
     document.getElementById('main').innerHTML = h;
     rail('');
     document.title = '阴燃 · The Slow Fire';
