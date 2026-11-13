@@ -184,10 +184,10 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     { key: 'mh', tag: { zh: '通俗卷', en: 'Popular Volume' },
       en: 'Tippecanoe County, 2051: the fight over Calloway\'s will, the lawsuit his biography dismisses in a single line. Seventeen chapters.' },
     { key: 'hd', tag: { zh: '外一种', en: 'Companion Tale' },
-      en: 'The plague years, 2033 to 2035: one man, a pair of glasses, and the chaos he used to tip half the world. Thirteen chapters.' }
+      en: 'The plague years, 2033 to 2035: one man, a pair of glasses, and the chaos he used to tip half the world. Thirteen chapters, an epilogue and one extra chapter.' }
   ];
   function partKey(c, n) { return c.k || (c.zh === '尾声' ? '尾' : n === 0 ? '楔' : pad(n)); }
-  function partShort(t) { return t.replace(/^第[0-9一二三四五六七八九十]+[回章]　/, ''); }
+  function partShort(t) { return t.replace(/^(第[0-9一二三四五六七八九十]+[回章]|外[一二三四五]章)　/, ''); }
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
