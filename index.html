@@ -184,7 +184,8 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     { key: 'mh', tag: { zh: '通俗卷', en: 'Popular Volume' },
       en: 'Tippecanoe County, 2051: the fight over Calloway\'s will, the lawsuit his biography dismisses in a single line. Seventeen chapters.' },
     { key: 'hd', tag: { zh: '外一种', en: 'Companion Tale' },
-      en: 'The plague years, 2033 to 2035: one man, a pair of glasses, and the chaos he used to tip half the world. Thirteen chapters, an epilogue and one extra chapter.' }
+      en: 'The plague years, 2033 to 2035: one man, a pair of glasses, and the chaos he used to tip half the world. Thirteen chapters, an epilogue and one extra chapter.',
+      extra: [['music/huode/', '乐', { zh: '火德 · 乐', en: '火德 · 乐 (the music)' }]] }
   ];
   function partKey(c, n) { return c.k || (c.zh === '尾声' ? '尾' : n === 0 ? '楔' : pad(n)); }
   function partShort(t) { return t.replace(/^(第[0-9一二三四五六七八九十]+[回章]|外[一二三四五]章)　/, ''); }
@@ -243,6 +244,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       if (!toc[w.key]) return;
       h += '<h3>' + w.tag[lang] + ' · ' + toc[w.key].zh + '</h3><ol>';
       P.forEach(function (p) { if (p.work === w.key) h += item(p, cur); });
+      (w.extra || []).forEach(function (e) { h += '<li><a href="' + e[0] + '"><span class="k">' + e[1] + '</span><span>' + esc(e[2][lang]) + '</span></a></li>'; });
       h += '</ol>';
     });
     h += '<h3>' + L[lang].guide + '</h3><ol>' + item(P[find('guide')], cur) + '</ol>';
@@ -310,6 +312,11 @@ html[lang="zh-CN"] .body p { text-align: justify; }
         h += '</ol>';
       } else {
         h += '<div class="single"><a href="#' + w.key + '">' + (zh ? '读《' + esc(t.zh) + '》' : 'Read ' + esc(t.zh) + ' (Chinese)') + '</a></div>';
+      }
+      if (w.extra) {
+        h += '<div class="single">';
+        w.extra.forEach(function (e) { h += '<a href="' + e[0] + '">' + esc(zh ? '听《' + e[2].zh + '》' : 'Listen: ' + e[2].en) + '</a>'; });
+        h += '</div>';
       }
       h += '</section>';
     });
