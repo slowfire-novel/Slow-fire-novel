@@ -60,6 +60,11 @@ h1 .dot { color: var(--cinnabar); }
 footer { border-top: 1px solid var(--rule); padding-top: 18px; display: grid; gap: 8px; color: var(--quiet); font-size: 14px; max-width: 68ch; }
 footer p { margin: 0; }
 @media (max-width: 520px) { .slip { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; } .vt { font-size: 18px; } }
+.tip { text-decoration: underline dotted; text-decoration-color: var(--quiet); text-underline-offset: 3px; text-decoration-thickness: 1px; cursor: help; }
+.tip:focus { outline: none; }
+.tip:focus-visible { outline: 1px solid var(--cinnabar); outline-offset: 1px; }
+#tipbox { position: fixed; z-index: 50; left: 0; top: 0; max-width: min(300px, 90vw); background: var(--ink); color: var(--slip); font: 400 13px/1.45 var(--body); padding: 6px 9px; border-radius: 2px; pointer-events: none; opacity: 0; transition: opacity .12s; box-shadow: 0 2px 10px rgba(0,0,0,.2); }
+#tipbox.on { opacity: 1; }
 </style>
 
 <div class="page">
@@ -80,7 +85,7 @@ footer p { margin: 0; }
   <footer>
     <p>Composed in code for 《火德》, a side volume of 《阴燃 · The Slow Fire》. The tuning comes from the book's two power grids, Hefei's 50 Hz and Lafayette's 60 Hz, a minor third apart; most pieces stand on one of them, and some bells carry both. Where a free recording exists, the instrument is a real one, re-pitched note by note to these tunings: erhu, guzheng, cello, guitars, drum kits, bass, ocarina, frame drums, horns and piano. The voices, suona, xiao, leaf, guqin, pipa and throat singing are still built from sound itself, because no free recording of them could be found. Each strip shows how loud the piece is over its length; click it to jump.</p>
     <p>"In the manner of" means exactly that. The tunes are new; the instruments, modes and rhythms follow the traditions they name. They were made by a composer who cannot hear: every change was measured first, and the author's ears had the last word.</p>
-    <p><a href="../../" style="color:inherit">← 阴燃 · The Slow Fire</a>
+    <p><a href="../../" style="color:inherit">← 阴燃 · The Slow Fire</a></p>
   </footer>
 </div>
 
@@ -154,6 +159,41 @@ audio.addEventListener('play', () => { if (cur) cur.btn.textContent = 'Pause'; l
 audio.addEventListener('pause', () => { if (cur) { cur.btn.textContent = 'Play'; draw(cur); } });
 audio.addEventListener('ended', () => { if (cur) { cur.btn.textContent = 'Play'; draw(cur); } });
 TRACKS.forEach(tr => $('s-' + tr.part).appendChild(slip(tr)));
+
+// English for the Chinese on hover (or tap). Titles and section headings already have their English beside them.
+const GLOSS = {"火德": "Fire Virtue: the element the Han dynasty ruled by, and this book's title", "乐": "music", "阴燃外一种": "a side volume of The Slow Fire", "《火德》": "Fire Virtue (the book)", "大风": "Great Wind: Liu Bang's song", "大风歌": "Song of the Great Wind", "大风起兮": "A great wind rises", "大风起兮云飞扬": "A great wind rises, and the clouds fly", "威加海内": "My might now reaches everything within the seas", "序曲": "Overture", "四面": "On Four Sides", "霸王": "the Hegemon-King (Xiang Yu)", "封矿": "Sealed Mines", "铜鼓": "bronze drum", "过去了": "It Passed", "白日如钱": "A White Sun Like a Coin", "挤兑": "The Run (on the exchange)", "尾声": "Epilogue", "编钟": "bronze bell chime", "二胡": "erhu, two-string fiddle", "筝": "zheng, plucked zither", "古筝": "guzheng, plucked zither", "唢呐": "suona, Chinese shawm", "建鼓": "jiangu, great drum on a pole", "筑": "zhu, an ancient struck zither", "琵琶": "pipa, lute", "号": "horn", "古琴": "guqin, seven-string zither", "箫": "xiao, end-blown bamboo flute", "呼麦": "khoomei, throat singing", "托布秀尔": "tobshuur, Mongolian lute", "四胡": "sihu, four-string fiddle", "二人台": "errentai, folk opera of Inner Mongolia and Shanxi", "木叶": "a leaf, blown", "天琴": "tianqin, Zhuang gourd lute", "长鼓": "Yao long drum", "弹布尔": "tanbur, Uyghur long-necked lute", "热瓦普": "rawap, Uyghur short-necked lute", "达甫": "dap, frame drum", "筒钦": "dungchen, Tibetan long horn", "钹": "cymbals", "鼓": "drum", "甲林": "gyaling, Tibetan shawm", "铃": "hand bell", "中": "the centre", "北": "the north", "南": "the south", "西": "the west", "羽": "yu, the mode on the sixth degree", "锣鼓经": "luogujing, the drum and gong patterns of Chinese opera", "吟": "yin, slow vibrato on the guqin", "走手": "zoushou, sliding the stopping finger along the string", "天人感应": "heaven and humanity answer each other", "故乡": "home", "复仇": "Revenge", "野心": "Ambition", "背叛": "Betrayal", "救命": "Saving a life", "问": "to ask", "不问": "not to ask", "年轻": "Youth", "感慨": "A sigh at the years", "释怀": "Letting go", "沛": "Pei, Liu Bang's home town", "丰县": "Feng County, where Liu Bang was born", "评书": "pingshu, spoken storytelling", "四面楚歌": "songs of Chu on all four sides: Xiang Yu, surrounded, hears his own people's songs in the enemy camp", "力拔山兮": "My strength could uproot mountains", "力拔山兮气盖世": "My strength could uproot mountains, my spirit overtopped the world", "时不利兮骓不逝": "but the times are against me, and my horse will not run", "虞兮虞兮": "Yu, oh Yu: Xiang Yu to his consort", "乌江": "the Wu River, where Xiang Yu died", "走西口": "Going West Through the Pass: the song of men leaving home to find work", "河曲": "Hequ county, Shanxi", "漫瀚调": "manhandiao, folk song that mixes Han and Mongol", "歌圩": "song fair, where strangers answer each other's songs", "二〇三五年夏天，瘟疫过去了。": "In the summer of 2035, the plague passed.", "像一枚铜钱搁在纱上": "like a copper coin laid on gauze", "三号井": "Shaft No. 3", "渡口": "Dukou, 'the ferry': the exchange", "退烧": "Tuishao, 'bring the fever down': the network's fund", "庄子·知北游": "Zhuangzi, 'Knowledge Wandered North'", "人生天地之间，若白驹之过隙，忽然而已": "A man's life between heaven and earth is a white colt glimpsed through a crack in the wall: there, and gone.", "是谁": "who did it", "然后呢": "and then what", "天让你看见什么，就是叫你去办什么": "Whatever heaven lets you see, it is telling you to go and do.", "因为你从来不问。": "Because you never asked.", "清明": "Qingming, the day for sweeping graves", "左权": "Zuoquan county, Shanxi", "桃花红杏花白": "Peach Blossoms Red, Apricot Blossoms White, a Shanxi folk song", "是，就说是；不是，就说不是": "Let your yes be yes, and your no, no.", "好的，老师": "Yes, Professor.", "不是": "No.", "期期知其不可": "I-I know it must not be done", "期期": "I-I: the stammer", "不": "not", "可": "may (不可: must not)", "内耗": "eat himself up inside", "你这一车菜，盖得住四百户，盖不住天。": "Your truckload of vegetables can cover four hundred households. It can't cover the sky.", "思危，思变，思退": "Think of danger, think of change, think of retreat", "日志不撒谎": "Logs don't lie.", "《人比AI更像AI》": "Humans Are More AI Than AI (the author's book)", "原型": "prototype", "无原型": "no prototype", "作者本人": "the author himself", "刘邦": "Liu Bang, founder of the Han dynasty", "项羽": "Xiang Yu, the Hegemon-King of Chu", "吕雉": "Lü Zhi, Liu Bang's empress", "卢绾": "Lu Wan, Liu Bang's childhood friend, born the same day", "萧何": "Xiao He, Liu Bang's chancellor, keeper of the records", "韩信": "Han Xin, Liu Bang's great general", "陆贾": "Lu Jia, the Han envoy to the far south", "张良": "Zhang Liang, Liu Bang's strategist, who knew when to retire", "周昌": "Zhou Chang, the stammering minister who defied the emperor", "后羿": "Hou Yi, the archer who shot down nine suns", "漂母": "the washerwoman who fed the young Han Xin", "梁文锋": "Liang Wenfeng, founder of DeepSeek", "黄石公": "Huang Shi Gong, the old man at the bridge who gave Zhang Liang a book", "黄石": "Huangshi, 'Yellow Stone': the AI oracle in the book", "季大有": "Ji Dayou", "江烈": "Jiang Lie", "江大山": "Jiang Dashan, Jiang Lie's father", "吕晴": "Lü Qing", "何满仓": "He Mancang", "韩临": "Han Lin", "温以诺": "Wen Yinuo", "以诺": "Yinuo (Enoch)", "陆嘉言": "Lu Jiayan", "邵昌": "Shao Chang", "乐子": "Lezi", "沈一舟": "Shen Yizhou", "安思危": "An Siwei", "奥乔亚": "Ochoa", "黄桂兰": "Huang Guilan", "甄教授": "Professor Zhen", "恩戈齐": "Ngozi", "淮安": "Huai'an", "杭州": "Hangzhou", "西安": "Xi'an", "许巍": "Xu Wei, rock singer-songwriter", "窦唯": "Dou Wei, rock musician", "不一定": "Not Necessarily, a Dou Wei piece", "兰花花": "Lanhuahua, a northern Shaanxi folk song", "信天游": "xintianyou, the open-air songs of northern Shaanxi", "《阴燃》": "The Slow Fire (the series)"};
+const GRX = new RegExp(Object.keys(GLOSS).sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g');
+function tips(root) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+  while (w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n => {
+    const s = n.nodeValue; GRX.lastIndex = 0; if (!GRX.test(s)) return; GRX.lastIndex = 0;
+    const f = document.createDocumentFragment(); let i = 0, m;
+    while ((m = GRX.exec(s))) {
+      if (m.index > i) f.appendChild(document.createTextNode(s.slice(i, m.index)));
+      const sp = document.createElement('span'); sp.className = 'tip'; sp.tabIndex = 0; sp.textContent = m[0];
+      sp.dataset.en = GLOSS[m[0]]; sp.setAttribute('aria-label', m[0] + ': ' + GLOSS[m[0]]);
+      f.appendChild(sp); i = m.index + m[0].length;
+    }
+    if (i < s.length) f.appendChild(document.createTextNode(s.slice(i)));
+    n.parentNode.replaceChild(f, n);
+  });
+}
+document.querySelectorAll('.eyebrow, h1, .lede, .part > p, .note, .meta, .chip, footer p').forEach(tips);
+const tipbox = document.createElement('div'); tipbox.id = 'tipbox'; tipbox.setAttribute('role', 'tooltip'); document.body.appendChild(tipbox);
+function showTip(el) {
+  tipbox.textContent = el.dataset.en; tipbox.classList.add('on');
+  const r = el.getBoundingClientRect(), b = tipbox.getBoundingClientRect(), vw = document.documentElement.clientWidth;
+  let x = r.left + r.width / 2 - b.width / 2; x = Math.max(8, Math.min(vw - b.width - 8, x));
+  let y = r.top - b.height - 6; if (y < 8) y = r.bottom + 6;
+  tipbox.style.left = x + 'px'; tipbox.style.top = y + 'px';
+}
+const hideTip = () => tipbox.classList.remove('on');
+document.addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('.tip'); if (t) showTip(t); });
+document.addEventListener('mouseout', e => { if (e.target.closest && e.target.closest('.tip')) hideTip(); });
+document.addEventListener('focusin', e => { if (e.target.classList && e.target.classList.contains('tip')) showTip(e.target); });
+document.addEventListener('focusout', hideTip);
+window.addEventListener('scroll', hideTip, { passive: true });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => TRACKS.forEach(draw));
 TRACKS.forEach(draw);
 </script>
