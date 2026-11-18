@@ -117,6 +117,10 @@ html[lang="zh-CN"] .body p { text-align: justify; }
 .body pre { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 3px; padding: .8rem 1rem; font-size: 14px; line-height: 1.6; margin: 1.4rem 0; }
 .notice { font-size: 14px; color: var(--muted); background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: .7rem 1rem; margin: 0 0 1.8rem; line-height: 1.6; }
 .notice strong { color: var(--ink); }
+.body p.huimu { text-align: center !important; font-size: 17px; letter-spacing: .12em; color: var(--muted); margin: -.6rem 0 2.2rem; }
+.body .chapter-notes { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 14.5px; line-height: 1.75; color: var(--muted); }
+.body .chapter-notes h2 { font-size: 15px; letter-spacing: .3em; margin: 0 0 .8rem; color: var(--ink); }
+.body .chapter-notes p { margin: 0 0 .55em; text-align: left; }
 
 /* Focal Line notes: present in the text, shown only when switched on */
 .body sup.n, .body aside.note, .body .note-preface, .body p.mrk { display: none; }
@@ -186,8 +190,10 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     { key: 'hd', tag: { zh: '外一种', en: 'Companion Tale' },
       en: 'The plague years, 2033 to 2035: one man, a pair of glasses, and the chaos he used to tip half the world. Thirteen chapters, an epilogue and one extra chapter.',
       extra: [['music/huode/', '乐', { zh: '火德 · 乐', en: '火德 · 乐 (the music)' }]] },
-    { key: 'hh', tag: { zh: '导读兼评', en: "Reader's Guide" }, k: '候', guideOnly: true,
-      lede: { zh: '世情小说《火候》的导读兼评', en: 'a reader\'s guide to the novel 火候' },
+    { key: 'hj', tag: { zh: '世情小说', en: 'Novel of Manners' },
+      en: 'Chengdu, the twelfth month of 2048: in the back room of a teahouse, a hundred and twenty people lie in recliners in glasses and work the night shift in bodies rented out in West Lafayette, Indiana; in seven days a new rule will end it. Volume One, twenty-two chapters, from 小年 to midnight on New Year\'s Eve, with 44 figures. This is the clean edition: love scenes stop at the threshold. The full text is available from the author on request (see 例言).',
+      extra: [['pdf/huohou-vol1-jieben.pdf', '印', { zh: '上部排印本 PDF', en: 'Volume One, print edition (PDF)' }, { zh: '下载上部排印本（PDF，A5，257 页）', en: 'Download Volume One, print edition (PDF, A5, 257 pages)' }]] },
+    { key: 'hh', tag: { zh: '导读兼评', en: "Reader's Guide" }, k: '候', guideOnly: true, lede: false,
       en: 'Chengdu, the winter of 2048: in the back room of a teahouse, a hundred and twenty people work the night shift in rented bodies in an Indiana town. A guide to and critique of the novel 火候, read against 金瓶梅 and 海上花列传; the second half discusses the ending.' }
   ];
   function partKey(c, n) { return c.k || (c.zh === '尾声' ? '尾' : n === 0 ? '楔' : pad(n)); }
@@ -290,8 +296,8 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
     var zh = lang === 'zh';
     var h = '<div class="col">' + controls(null) + '<section class="hero"><h1>阴燃</h1><p class="en-title">The Slow Fire</p><div class="focal" aria-hidden="true"></div>';
-    h += zh ? '<p class="lede">一部写记忆的科幻小说。二〇四五年，印第安纳州的一个县，电不够用，每天夜里要把人眼镜里的个人助手压缩一遍：留什么，删什么，谁说了算。两卷四十四章，中英两种文字；另有写在十九年后的续篇《焦线》，以及同一个世界里的' + WORKS.filter(function (w) { return toc[w.key]; }).map(function (w) { return w.lede ? w.lede.zh : w.tag.zh + '《' + toc[w.key].zh + '》'; }).join('、') + '。</p>'
-           : '<p class="lede">A science-fiction novel about memory. In 2045 an Indiana county runs short of power, and every night the personal assistants in people\'s glasses are compressed: what is kept, what is cut, and who decides. Two volumes, forty-four chapters, in Chinese and English, and a sequel set nineteen years later, plus further works from the same world in Chinese: ' + WORKS.filter(function (w) { return toc[w.key]; }).map(function (w) { return w.lede ? w.lede.en : 'a ' + w.tag.en.toLowerCase() + ' (' + toc[w.key].zh + ')'; }).join(', ').replace(/, ([^,]*)$/, ', and $1') + '.</p>';
+    h += zh ? '<p class="lede">一部写记忆的科幻小说。二〇四五年，印第安纳州的一个县，电不够用，每天夜里要把人眼镜里的个人助手压缩一遍：留什么，删什么，谁说了算。两卷四十四章，中英两种文字；另有写在十九年后的续篇《焦线》，以及同一个世界里的' + WORKS.filter(function (w) { return toc[w.key] && w.lede !== false; }).map(function (w) { return w.lede ? w.lede.zh : w.tag.zh + '《' + toc[w.key].zh + '》'; }).join('、') + '。</p>'
+           : '<p class="lede">A science-fiction novel about memory. In 2045 an Indiana county runs short of power, and every night the personal assistants in people\'s glasses are compressed: what is kept, what is cut, and who decides. Two volumes, forty-four chapters, in Chinese and English, and a sequel set nineteen years later, plus further works from the same world in Chinese: ' + WORKS.filter(function (w) { return toc[w.key] && w.lede !== false; }).map(function (w) { return w.lede ? w.lede.en : 'a ' + w.tag.en.toLowerCase() + ' (' + toc[w.key].zh + ')'; }).join(', ').replace(/, ([^,]*)$/, ', and $1') + '.</p>';
     h += zh ? '<p class="made">本书由一位作者与AI合写。主意和取舍是人的，句子大多由机器起草；哪些出自谁手，《导读》末尾的<a href="#afterword">跋</a>里有交代。<a href="#preface">序</a>是全书唯一完全由人写成的部分。</p>'
            : '<p class="made">Written by one author with an AI. The ideas and choices are human; most sentences were drafted by the machine. Who did what is set out in the <a href="#afterword">afterword</a> to the Reader\'s Guide (Chinese). The <a href="#preface">preface</a> is the only part written entirely by hand.</p>';
     h += '</section><div class="ledger">';
@@ -319,7 +325,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       }
       if (w.extra) {
         h += '<div class="single">';
-        w.extra.forEach(function (e) { h += '<a href="' + e[0] + '">' + esc(zh ? '听《' + e[2].zh + '》' : 'Listen: ' + e[2].en) + '</a>'; });
+        w.extra.forEach(function (e) { h += '<a href="' + e[0] + '">' + esc(e[3] ? e[3][lang] : zh ? '听《' + e[2].zh + '》' : 'Listen: ' + e[2].en) + '</a>'; });
         h += '</div>';
       }
       h += '</section>';
