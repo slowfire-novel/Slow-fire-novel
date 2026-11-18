@@ -108,6 +108,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
 .body ul, .body ol { padding-left: 1.4em; margin: 0 0 1.1em; }
 .body figure { margin: 2rem 0; }
 .body figure img { display: block; width: 100%; height: auto; border-radius: 3px; background: #fff; }
+.body p.huimu { text-align: center !important; color: var(--muted); font-size: 15px; margin: -1rem 0 1.8rem; }
 .body figcaption { margin-top: .55rem; font-size: 13px; line-height: 1.6; color: var(--muted); text-align: center; }
 .tablewrap { overflow-x: auto; margin: 1.4rem 0; border: 1px solid var(--rule); border-radius: 3px; }
 .body table { border-collapse: collapse; font-size: 14px; line-height: 1.55; min-width: 100%; }
@@ -117,10 +118,6 @@ html[lang="zh-CN"] .body p { text-align: justify; }
 .body pre { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 3px; padding: .8rem 1rem; font-size: 14px; line-height: 1.6; margin: 1.4rem 0; }
 .notice { font-size: 14px; color: var(--muted); background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: .7rem 1rem; margin: 0 0 1.8rem; line-height: 1.6; }
 .notice strong { color: var(--ink); }
-.body p.huimu { text-align: center !important; font-size: 17px; letter-spacing: .12em; color: var(--muted); margin: -.6rem 0 2.2rem; }
-.body .chapter-notes { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 14.5px; line-height: 1.75; color: var(--muted); }
-.body .chapter-notes h2 { font-size: 15px; letter-spacing: .3em; margin: 0 0 .8rem; color: var(--ink); }
-.body .chapter-notes p { margin: 0 0 .55em; text-align: left; }
 
 /* Focal Line notes: present in the text, shown only when switched on */
 .body sup.n, .body aside.note, .body .note-preface, .body p.mrk { display: none; }
@@ -190,10 +187,12 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     { key: 'hd', tag: { zh: '外一种', en: 'Companion Tale' },
       en: 'The plague years, 2033 to 2035: one man, a pair of glasses, and the chaos he used to tip half the world. Thirteen chapters, an epilogue and one extra chapter.',
       extra: [['music/huode/', '乐', { zh: '火德 · 乐', en: '火德 · 乐 (the music)' }]] },
-    { key: 'hj', tag: { zh: '世情小说', en: 'Novel of Manners' },
-      en: 'Chengdu, the twelfth month of 2048: in the back room of a teahouse, a hundred and twenty people lie in recliners in glasses and work the night shift in bodies rented out in West Lafayette, Indiana; in seven days a new rule will end it. Volume One, twenty-two chapters, from 小年 to midnight on New Year\'s Eve, with 44 figures. This is the clean edition: love scenes stop at the threshold. The full text is available from the author on request (see 例言).',
-      extra: [['pdf/huohou-vol1-jieben.pdf', '印', { zh: '上部排印本 PDF', en: 'Volume One, print edition (PDF)' }, { zh: '下载上部排印本（PDF，A5，257 页）', en: 'Download Volume One, print edition (PDF, A5, 257 pages)' }]] },
-    { key: 'hh', tag: { zh: '导读兼评', en: "Reader's Guide" }, k: '候', guideOnly: true, lede: false,
+    { key: 'huohou', tag: { zh: '世情卷', en: 'Novel of Manners' },
+      lede: { zh: '世情卷《火候》（洁本）', en: 'a novel of manners, 火候 (in a clean edition)' },
+      en: 'Chengdu and Lafayette, Indiana, thirteen hours apart, around the Spring Festival of 2048: a teahouse back room and a dozen households, their meals, accounts, lovers and deaths. Two volumes and an extra chapter. A clean edition: the bed scenes stop at the door; the full text is available from the author.',
+      extra: [['火候/火候_上部_洁本.pdf', '印', { zh: '上部排印本 PDF', en: 'Volume One, print edition (PDF)' }, { zh: '下载上部排印本（PDF，A5，257 页）', en: 'Download Volume One, print edition (PDF, A5, 257 pages)' }]] },
+    { key: 'hh', tag: { zh: '导读兼评', en: "Reader's Guide" }, k: '候', guideOnly: true,
+      lede: { zh: '世情小说《火候》的导读兼评', en: 'a reader\'s guide to the novel 火候' },
       en: 'Chengdu, the winter of 2048: in the back room of a teahouse, a hundred and twenty people work the night shift in rented bodies in an Indiana town. A guide to and critique of the novel 火候, read against 金瓶梅 and 海上花列传; the second half discusses the ending.' }
   ];
   function partKey(c, n) { return c.k || (c.zh === '尾声' ? '尾' : n === 0 ? '楔' : pad(n)); }
@@ -397,6 +396,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     closeRail();
     var id = (location.hash || '').replace(/^#/, '');
     if (id === 'afterword') { pendingAfterword = true; id = 'guide'; }
+    if (/^hj-\d\d$/.test(id)) id = 'huohou-' + id.slice(3);
     var i = find(id);
     if (i < 0) home(); else page(i);
     window.scrollTo(0, 0);
