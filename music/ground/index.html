@@ -1,0 +1,579 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Ground Keeps Us Warm</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column of four plates. Each plate is a flat field of one colour, after Parajanov,
+   with a drawing that follows the sound, and a ledger line under it in tally's voice. */
+:root {
+  --bg: #ecebe4;
+  --fg: #15130f;
+  --quiet: #5d584d;
+  --rule: #c9c6ba;
+  --pomegranate: #9c1d2f;
+  --ochre: #d6a12a;
+  --ultramarine: #1c3a9e;
+  --turquoise: #2aa59b;
+  --gold: #f0c84b;
+  --chalk: #f4efe2;
+  --night: #0b0b0d;
+  --ink: #17130e;
+  --phosphor: #9dffb4;
+  --scope: #061210;
+  --display: "Bodoni Moda", "Songti SC", "Noto Serif SC", Georgia, serif;
+  --body: "IBM Plex Sans", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #131210; --fg: #ece8dc; --quiet: #a39d8e; --rule: #3a372f; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #131210; --fg: #ece8dc; --quiet: #a39d8e; --rule: #3a372f; color-scheme: dark; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+}
+.page { max-width: 880px; margin-inline: auto; display: grid; gap: 56px; }
+header { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quiet); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(38px, 8vw, 72px); line-height: 0.98; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+h1 em { font-weight: 500; }
+.lede { max-width: 62ch; margin: 0; font-size: 17px; }
+.plate { display: grid; gap: 12px; }
+.plate h2 { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 5vw, 38px); line-height: 1.05; margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.plate h2 .zh { font-family: var(--body); font-weight: 500; font-size: 16px; color: var(--quiet); }
+.plate p { margin: 0; max-width: 64ch; }
+.field { position: relative; border-radius: 2px; overflow: hidden; background: var(--field); }
+.field canvas { display: block; width: 100%; aspect-ratio: 16 / 10; max-width: 100%; }
+@media (max-width: 560px) { .field canvas { aspect-ratio: 1 / 1; } }
+#p-sixty { --field: var(--pomegranate); --mark: var(--chalk); --hot: var(--gold); }
+#p-ninety { --field: var(--ochre); --mark: var(--ink); --hot: var(--chalk); }
+#p-seasoning { --field: var(--scope); --mark: var(--phosphor); --hot: var(--chalk); }
+#p-seasoning .field { background-color: var(--scope); background-image: linear-gradient(rgba(157,255,180,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(157,255,180,0.07) 1px, transparent 1px); background-size: 10% 12.5%; background-position: -1px -1px; }
+#p-pixel { --field: var(--night); --mark: var(--chalk); --hot: var(--turquoise); }
+#p-voss { --field: #0d1013; --mark: #e9b562; --hot: #f4efe2; }
+.controls { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; }
+.controls button {
+  font: 500 14px/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--bg); background: var(--fg); border: 0; border-radius: 2px; padding: 11px 16px; min-width: 84px; cursor: pointer;
+}
+.controls button:hover { opacity: 0.86; }
+.controls button:focus-visible, .controls input:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+.controls input[type="range"] { width: 100%; min-width: 0; accent-color: var(--fg); }
+.clock { font: 400 13px/1 var(--mono); font-variant-numeric: tabular-nums; color: var(--quiet); white-space: nowrap; }
+.ledger { font: 400 13px/1.5 var(--mono); font-variant-numeric: tabular-nums; color: var(--fg); border-top: 1px solid var(--rule); padding-top: 10px; min-height: 2.9em; overflow-wrap: anywhere; }
+.ledger b { font-weight: 500; }
+.key { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 400 13px/1.4 var(--mono); color: var(--quiet); }
+.key span { display: inline-flex; align-items: center; gap: 7px; }
+.key i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; }
+.key .k-b { border: 1.5px solid var(--fg); }
+.key .k-a { background: var(--fg); }
+.key .k-o { border: 1.5px solid var(--fg); background: radial-gradient(circle, var(--fg) 0 32%, transparent 36%); }
+.more { display: grid; gap: 14px; }
+.more > h2 { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 5vw, 38px); margin: 0; }
+.more > p { margin: 0; max-width: 64ch; color: var(--quiet); }
+.slip { display: grid; gap: 8px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.slip .row1 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.slip .t { font-family: var(--display); font-weight: 700; font-size: 20px; }
+.slip .zh { font-size: 15px; color: var(--quiet); }
+.slip .meta { font: 400 12px/1.4 var(--mono); color: var(--quiet); }
+.slip p { margin: 0; max-width: 66ch; }
+.slip .player { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.slip .player button { font: 500 14px/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--bg); background: var(--fg); border: 0; border-radius: 2px; padding: 11px 16px; min-width: 84px; cursor: pointer; }
+.slip .player button:focus-visible, .slip canvas:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+.slip canvas { width: 100%; height: 38px; display: block; cursor: pointer; }
+footer { border-top: 1px solid var(--rule); padding-top: 18px; display: grid; gap: 8px; color: var(--quiet); font-size: 14px; max-width: 64ch; }
+footer p { margin: 0; }
+</style>
+
+<div class="page">
+  <header>
+    <div class="eyebrow">阴燃 · The Slow Fire · five sketches toward a score</div>
+    <h1>The Ground <em>Keeps Us</em> Warm</h1>
+    <p class="lede">Each piece runs one process from one chapter, and each drawing is that process seen as it sounds. Everything is tuned to the hum of the power grid: 60 Hz in Lafayette, 50 Hz in Hefei, a pure minor third apart.</p>
+  </header>
+
+  <section class="plate" id="p-sixty" aria-labelledby="h-sixty">
+    <h2 id="h-sixty">Sixty-Four <span class="zh">别 · 问 · 其他</span></h2>
+    <p>Sixty-four voices behind the wall are the sixty-four steps of one eight-bar tune, read row by row. What each voice says on a given date decides how its step is played. The counts are the ones in the codas. The last step is the narrator, a rest until 5 May 2045.</p>
+    <div class="field"><canvas id="c-sixty" role="img" aria-label="A grid of sixty-four marks, one for each voice, changing as the piece plays"></canvas></div>
+    <div class="key" aria-hidden="true"><span><i class="k-b"></i>别 a short note, cut off</span><span><i class="k-a"></i>问 falls a fifth and rings</span><span><i class="k-o"></i>其他 rises and is held</span></div>
+    <div class="controls"><button id="b-sixty" type="button">Play</button><input id="r-sixty" type="range" min="0" max="174.1" step="0.1" value="0" aria-label="Position in Sixty-Four"><span class="clock" id="k-sixty">0:00 / 2:54</span></div>
+    <div class="ledger" id="l-sixty"></div>
+  </section>
+
+  <section class="plate" id="p-ninety" aria-labelledby="h-ninety">
+    <h2 id="h-ninety">Ninety Sentences <span class="zh">三十个早晨</span></h2>
+    <p>Each morning a question, then three sentences, then the copy says back one note for every day it was told. The line along the bottom is everything it has. On 29 May nobody reads, and that place stays empty.</p>
+    <div class="field"><canvas id="c-ninety" role="img" aria-label="Three plucked phrases for the current morning, above a row of thirty places that fills by one note a day"></canvas></div>
+    <div class="controls"><button id="b-ninety" type="button">Play</button><input id="r-ninety" type="range" min="0" max="348" step="0.1" value="0" aria-label="Position in Ninety Sentences"><span class="clock" id="k-ninety">0:00 / 5:48</span></div>
+    <div class="ledger" id="l-ninety"></div>
+  </section>
+
+  <section class="plate" id="p-seasoning" aria-labelledby="h-seasoning">
+    <h2 id="h-seasoning">Seasoning <span class="zh">挡片 · XY</span></h2>
+    <p>Left channel is X and right channel is Y, so the sound draws its own pictures, and this screen is the sound file read sample by sample. Almost every note is two pure tones, a bass turning one way and a melody turning the other. A just interval p:q draws a flower of p+q petals. While the chamber is unsettled the melody is a hair out of tune and the flower turns; by the twelfth dummy wafer it stands still. After each wafer the fluorine line is drawn, a little flatter each time. Then lot 4417's ring, the lot number, and the bell.</p>
+    <div class="field"><canvas id="c-seasoning" role="img" aria-label="An oscilloscope in XY mode drawing wafers, a flattening line, a ring resonator, the numerals 4417 and a bell"></canvas></div>
+    <div class="controls"><button id="b-seasoning" type="button">Play</button><input id="r-seasoning" type="range" min="0" max="84.4" step="0.05" value="0" aria-label="Position in Seasoning"><span class="clock" id="k-seasoning">0:00 / 1:24</span></div>
+    <div class="ledger" id="l-seasoning"></div>
+  </section>
+
+  <section class="plate" id="p-pixel" aria-labelledby="h-pixel">
+    <h2 id="h-pixel">One Pixel <span class="zh">一个像素</span></h2>
+    <p>One hour of the planet is one second, so the piece lasts one year of Proxima b. The dot is all the data there is: one exposure an hour, one soft chime a second, as bright as the light curve says. The shape around it is what a prior makes of the dot, for as long as there is a prior.</p>
+    <div class="field"><canvas id="c-pixel" role="img" aria-label="A single point of light whose brightness follows the sound, with a faint map around it that later disappears"></canvas></div>
+    <div class="controls"><button id="b-pixel" type="button">Play</button><input id="r-pixel" type="range" min="0" max="276.6" step="0.1" value="0" aria-label="Position in One Pixel"><span class="clock" id="k-pixel">0:00 / 4:37</span></div>
+    <div class="ledger" id="l-pixel"></div>
+  </section>
+
+  <section class="plate" id="p-voss" aria-labelledby="h-voss">
+    <h2 id="h-voss">01:17 <span class="zh">确认</span></h2>
+    <p>Voss, in the manner of Blade Runner and of Zimmer: rain on the garage roof, a slow brassy pad, a lead that glides. The theme is two falling notes, què rèn, answered by a long line. Under it, one tick for every night he paid, 203 of them. The 204th does not come. At 02:00 the floor gives way. The next night someone else pays, and the chord turns major.</p>
+    <div class="field"><canvas id="c-voss" role="img" aria-label="A ring of 204 marks, lit one by one as the nights are paid; the last stays dark"></canvas></div>
+    <div class="controls"><button id="b-voss" type="button">Play</button><input id="r-voss" type="range" min="0" max="124.1" step="0.1" value="0" aria-label="Position in 01:17"><span class="clock" id="k-voss">0:00 / 2:04</span></div>
+    <div class="ledger" id="l-voss"></div>
+  </section>
+
+  <section class="more" aria-labelledby="h-more">
+    <h2 id="h-more">More from the night</h2>
+    <p>Life songs for the people of Lafayette, and other cues. No drawings here; the strip shows how loud each piece is over its length, and you can click it to jump.</p>
+    <div id="more"></div>
+  </section>
+
+  <footer>
+    <p>Built in code from the books' numbers. The dates, counts, periods and Q are the books'. The pitches and the scale of time are choices.</p>
+    <p>Checked by measurement. Three plates are second versions, rebuilt on 12 November 2026 after a first listen. Sixty-Four now has a pulse and a tune. Seasoning is now oscilloscope music, made of pure tones. One Pixel no longer holds a steady tone under everything.</p>
+  </footer>
+</div>
+
+<script>
+const SIXTY = {"version":2,"dur":174.05999999999997,"step":0.18,"lead":2.0,"mel":[480.0,360.0,480.0,640.0,480.0,360.0,320.0,360.0,480.0,360.0,480.0,640.0,720.0,640.0,480.0,360.0,640.0,480.0,640.0,720.0,640.0,480.0,432.0,480.0,480.0,360.0,320.0,360.0,480.0,360.0,320.0,240.0,576.0,480.0,576.0,720.0,576.0,480.0,432.0,480.0,640.0,480.0,640.0,720.0,960.0,720.0,640.0,480.0,720.0,640.0,720.0,960.0,720.0,640.0,480.0,640.0,480.0,360.0,480.0,640.0,480.0,360.0,320.0,240.0],"loops":[{"t0":2.0,"label":"before 5 May 2045","counts":[63,0,0],"state":"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB-"},{"t0":13.52,"label":"5 May 2045","counts":[63,1,0],"state":"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA"},{"t0":25.04,"label":"6 May 2045","counts":[62,2,0],"state":"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA"},{"t0":36.56,"label":"6 Jun 2045","counts":[61,3,0],"state":"BBBBBBBBBBBBBBBABBBBBBBBBBBBBBBABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA"},{"t0":48.08,"label":"2 Jul 2045","counts":[59,5,0],"state":"BBBBBBBABBBBBBBABBBBBBBBBBBBBBBABBBBBBBBBBBBBBBABBBBBBBBBBBBBBBA"},{"t0":59.6,"label":"27 Aug 2045","counts":[58,5,1],"state":"OBBBBBBABBBBBBBABBBBBBBBBBBBBBBABBBBBBBBBBBBBBBABBBBBBBBBBBBBBBA"},{"t0":71.12,"label":"9 Dec 2045","counts":[51,6,7],"state":"OBBBBBBAOBBBBBBAOBBBBBBBOBBBBBBAOBBBBBBAOBBBBBBAOBBBBBBBBBBBBBBA"},{"t0":82.64,"label":"15 Sep 2046","counts":[31,5,28],"state":"OBOBOBOAOBOBOBBAOBOBOBOBOBOBOBBAOBOBOBOBOBOBOBBAOBOBOBOBOBOBOBBA"},{"t0":94.16,"label":"15 Sep 2046","counts":[31,5,28],"state":"OBOBOBOAOBOBOBBAOBOBOBOBOBOBOBBAOBOBOBOBOBOBOBBAOBOBOBOBOBOBOBBA"},{"t0":105.68,"label":"17 Oct 2046","counts":[30,5,29],"state":"OBOBOBOAOBOBOBOAOBOBOBOBOBOBOBBAOBOBOBOBOBOBOBBAOBOBOBOBOBOBOBBA"}],"tutti":[118.79999999999998,126.79999999999998],"gap":[134.29999999999998,144.29999999999998],"coda":{"t0":144.29999999999998,"step":0.09}};
+const NINETY = {"dur":348.0,"coda":314.0,"timing":{"E":0.2,"day_t0":[2.0,9.2,17.2,25.2,33.2,41.2,50.0,58.8,67.6,76.4,86.0,95.6,105.2,114.8,125.2,135.6,146.0,156.4,167.6,178.8,190.0,201.2,213.2,225.2,237.2,249.2,262.0,274.8,287.6,300.4],"q_off":0.4,"q_step":0.4,"lin_off":1.6,"step":0.2,"gap":0.4,"mem_off":6.0,"mem_step":0.2,"ans_off":2.4000000000000004,"ans_step":0.1},"notes_in_answer":399,"days":[[[576.0,480.0,576.0,480.0],[360.0,288.0,320.0,360.0,480.0],[432.0,360.0,320.0,320.0,480.0]],[[576.0,640.0,576.0,640.0],[432.0,360.0,288.0,240.0,240.0],[432.0,320.0,320.0,320.0,480.0]],[[480.0,432.0,480.0,360.0],[576.0,480.0,360.0,320.0],[432.0,480.0,320.0,320.0,480.0]],[[360.0,480.0,432.0,320.0,288.0],[432.0,360.0,432.0,360.0,432.0],[640.0,720.0,320.0,320.0,480.0]],[[576.0,432.0,576.0,720.0],[432.0,480.0,360.0,432.0],[576.0,640.0,320.0,320.0,480.0]],[[480.0,576.0,480.0,360.0],[640.0,576.0,640.0,720.0,576.0],[360.0,432.0,320.0,320.0,480.0]],[[640.0,480.0,360.0,320.0],[432.0,360.0,320.0,432.0],[432.0,360.0,320.0,320.0,480.0]],[[360.0,480.0,576.0,640.0,576.0],[360.0,320.0,288.0,360.0],[480.0,576.0,320.0,320.0,480.0]],[[640.0,864.0,960.0,864.0,640.0],[480.0,576.0,720.0,640.0],[432.0,480.0,320.0,320.0,480.0]],[[432.0,320.0,360.0,320.0],[576.0,480.0,576.0,720.0,576.0],[576.0,640.0,320.0,320.0,480.0]],[[480.0,640.0,720.0,960.0,960.0],[360.0,432.0,320.0,288.0],[576.0,640.0,320.0,320.0,480.0]],[[640.0,720.0,576.0,432.0],[360.0,432.0,320.0,240.0,320.0],[576.0,432.0,320.0,320.0,480.0]],[[432.0,360.0,288.0,240.0],[640.0,576.0,640.0,864.0],[360.0,432.0,320.0,320.0,480.0]],[[576.0,432.0,480.0,432.0],[432.0,480.0,640.0,576.0,640.0],[576.0,640.0,320.0,320.0,480.0]],[[576.0,480.0,432.0,480.0,360.0],[576.0,640.0,480.0,360.0],[576.0,480.0,320.0,320.0,480.0]],[[640.0,720.0,640.0,720.0,640.0],[640.0,864.0,720.0,576.0],[576.0,720.0,320.0,320.0,480.0]],[[480.0,576.0,480.0,576.0,640.0],[640.0,864.0,640.0,576.0,480.0],[360.0,432.0,320.0,320.0,480.0]],[[360.0,480.0,432.0,480.0],[360.0,480.0,432.0,576.0],[640.0,480.0,320.0,320.0,480.0]],[[480.0,576.0,480.0,576.0,432.0],[640.0,576.0,432.0,320.0],[432.0,480.0,320.0,320.0,480.0]],[[640.0,720.0,640.0,720.0],[480.0,360.0,480.0,432.0,480.0],[360.0,320.0,320.0,320.0,480.0]],[[640.0,576.0,640.0,480.0],[480.0,360.0,288.0,240.0,240.0],[576.0,480.0,320.0,320.0,480.0]],null,[[576.0,720.0,864.0,720.0,640.0],[576.0,480.0,576.0,432.0],[640.0,480.0,320.0,320.0,480.0]],[[360.0,432.0,320.0,432.0],[576.0,720.0,960.0,960.0],[432.0,576.0,320.0,320.0,480.0]],[[576.0,480.0,432.0,480.0,360.0],[576.0,640.0,480.0,360.0],[576.0,480.0,320.0,320.0,480.0]],[[360.0,320.0,432.0,576.0,480.0],[640.0,720.0,576.0,720.0],[576.0,640.0,320.0,320.0,480.0]],[[432.0,480.0,576.0,720.0],[576.0,640.0,576.0,640.0],[360.0,320.0,320.0,320.0,480.0]],[[360.0,432.0,360.0,320.0],[640.0,864.0,720.0,640.0],[432.0,320.0,320.0,320.0,480.0]],[[640.0,720.0,960.0,960.0],[640.0,864.0,720.0,640.0],[480.0,640.0,320.0,320.0,480.0]],[[480.0,360.0,320.0,360.0,480.0],[640.0,720.0,640.0,576.0],[640.0,576.0,320.0,320.0,480.0]]]};
+const SEASON = {"dur":84.4,"beat":0.6,"wafers":5.2,"ring":63.4,"num":73.0,"bell":75.4,"Q":[12.0,20.3,34.2,57.7,97.4,164.4,277.4,468.2,790.3,1333.9,2251.4,3800.0],"events":[[0.4,"flower",8.0,2.4,120.0,5,"4:1",1.6],[2.8,"flower",8.0,2.4,120.0,5,"4:1",-1.2],[5.2,"knock",12.0,0.008],[5.2,"flower",4.0,0.6,120,3,"2:1",0.9],[5.8,"flower",5.0,0.6,120,7,"5:2",0.9],[6.4,"flower",6.0,0.6,120,4,"3:1",0.9],[7.0,"flower",5.0,0.6,120,7,"5:2",0.9],[7.6,"flower",8.0,1.2,180,11,"8:3",0.9],[8.8,"flower",6.0,0.6,180,3,"2:1",0.9],[9.4,"line",0.42,0.6],[10.0,"knock",20.3,0.0134],[10.0,"flower",4.0,0.6,120,3,"2:1",-0.773],[10.6,"flower",5.0,0.6,120,7,"5:2",-0.773],[11.2,"flower",6.0,0.6,120,4,"3:1",-0.773],[11.8,"flower",8.0,0.6,120,5,"4:1",-0.773],[12.4,"flower",6.0,1.2,180,3,"2:1",-0.773],[13.6,"flower",5.0,0.6,180,8,"5:3",-0.773],[14.2,"line",0.3711,0.6],[14.8,"knock",34.2,0.0227],[14.8,"flower",5.0,0.6,120,7,"5:2",0.653],[15.4,"flower",6.0,0.6,120,4,"3:1",0.653],[16.0,"flower",8.0,0.6,120,5,"4:1",0.653],[16.6,"flower",6.0,0.6,120,4,"3:1",0.653],[17.2,"flower",9.0,1.2,180,4,"3:1",0.653],[18.4,"flower",8.0,0.6,180,11,"8:3",0.653],[19.0,"line",0.3236,0.6],[19.6,"knock",57.7,0.0383],[19.6,"flower",6.0,0.6,120,4,"3:1",-0.541],[20.2,"flower",8.0,0.6,120,5,"4:1",-0.541],[20.8,"flower",9.0,0.6,120,11,"9:2",-0.541],[21.4,"flower",8.0,0.6,120,5,"4:1",-0.541],[22.0,"flower",6.0,1.2,120,4,"3:1",-0.541],[23.2,"flower",5.0,0.6,120,7,"5:2",-0.541],[23.8,"line",0.2776,0.6],[24.4,"knock",97.4,0.0646],[24.4,"flower",6.0,0.6,240,5,"3:2",0.437],[25.0,"flower",8.0,0.6,240,3,"2:1",0.437],[25.6,"flower",10.0,0.6,240,7,"5:2",0.437],[26.2,"flower",9.0,0.6,240,13,"9:4",0.437],[26.8,"flower",8.0,1.2,180,11,"8:3",0.437],[28.0,"flower",6.0,0.6,180,3,"2:1",0.437],[28.6,"line",0.2334,0.6],[29.2,"knock",164.4,0.109],[29.2,"flower",8.0,0.6,240,3,"2:1",-0.341],[29.8,"flower",9.0,0.6,240,13,"9:4",-0.341],[30.4,"flower",10.0,0.6,240,7,"5:2",-0.341],[31.0,"flower",12.0,0.6,240,4,"3:1",-0.341],[31.6,"flower",10.0,1.2,180,13,"10:3",-0.341],[32.8,"flower",8.0,0.6,180,11,"8:3",-0.341],[33.4,"line",0.191,0.6],[34.0,"knock",277.4,0.184],[34.0,"flower",9.0,0.6,240,13,"9:4",0.255],[34.6,"flower",10.0,0.6,240,7,"5:2",0.255],[35.2,"flower",12.0,0.6,240,4,"3:1",0.255],[35.8,"flower",10.0,0.6,240,7,"5:2",0.255],[36.4,"flower",9.0,1.2,180,4,"3:1",0.255],[37.6,"flower",8.0,0.6,180,11,"8:3",0.255],[38.2,"line",0.1507,0.6],[38.8,"knock",468.2,0.3105],[38.8,"flower",8.0,0.6,240,3,"2:1",-0.178],[39.4,"flower",10.0,0.6,240,7,"5:2",-0.178],[40.0,"flower",9.0,0.6,240,13,"9:4",-0.178],[40.6,"flower",8.0,0.6,240,3,"2:1",-0.178],[41.2,"flower",6.0,1.2,120,4,"3:1",-0.178],[42.4,"flower",8.0,0.6,120,5,"4:1",-0.178],[43.0,"line",0.1128,0.6],[43.6,"knock",790.3,0.5241],[43.6,"flower",8.0,0.6,120,5,"4:1",0.113],[44.2,"flower",10.0,0.6,120,6,"5:1",0.113],[44.8,"flower",11.0,0.6,120,13,"11:2",0.113],[45.4,"flower",12.0,0.6,120,7,"6:1",0.113],[46.0,"flower",11.0,1.2,180,14,"11:3",0.113],[47.2,"flower",10.0,0.6,180,13,"10:3",0.113],[47.8,"line",0.0776,0.6],[48.4,"knock",1333.9,0.8846],[48.4,"flower",10.0,0.6,120,6,"5:1",-0.059],[49.0,"flower",11.0,0.6,120,13,"11:2",-0.059],[49.6,"flower",12.0,0.6,120,7,"6:1",-0.059],[50.2,"flower",11.0,0.6,120,13,"11:2",-0.059],[50.8,"flower",10.0,1.2,180,13,"10:3",-0.059],[52.0,"flower",9.0,0.6,180,4,"3:1",-0.059],[52.6,"line",0.0458,0.6],[53.2,"knock",2251.4,1.493],[53.2,"flower",12.0,0.6,120,7,"6:1",0.019],[53.8,"flower",11.0,0.6,120,13,"11:2",0.019],[54.4,"flower",10.0,0.6,120,6,"5:1",0.019],[55.0,"flower",9.0,0.6,120,11,"9:2",0.019],[55.6,"flower",8.0,1.2,180,11,"8:3",0.019],[56.8,"flower",10.0,0.6,180,13,"10:3",0.019],[57.4,"line",0.0186,0.6],[58.0,"knock",3800.0,2.52],[58.0,"flower",8.0,0.6,120,5,"4:1",-0.0],[58.6,"flower",9.0,0.6,120,11,"9:2",-0.0],[59.2,"flower",10.0,0.6,120,6,"5:1",-0.0],[59.8,"flower",12.0,0.6,120,7,"6:1",-0.0],[60.4,"flower",12.0,1.8,120,7,"6:1",0.0],[62.2,"line",0.0,0.6],[63.4,"ring",8,0.6],[64.0,"ring",10,0.6],[64.6,"ring",12,0.6],[65.2,"ring",16,0.6],[65.8,"ring",12,0.6],[66.4,"ring",10,0.6],[67.0,"ring",9,0.6],[67.6,"ring",8,0.6],[68.2,"ring",9,0.6],[68.8,"ring",10,0.6],[69.4,"ring",12,0.6],[70.0,"ring",15,0.6],[70.6,"ring",16,1.2],[71.8,"ring",12,1.2],[73.0,"numerals",1,2.4],[75.4,"bell",4,9.0]]};
+const VOSS = {"dur":124.10000000000001,"theme":19.0,"ticks":23.0,"t204":83.9,"dark":86.10000000000001,"next":95.10000000000001,"county":109.10000000000001};
+const MORE = [{"en":"Lin","zh":"琳","meta":"life song · 坂本龙一 and Zimmer · v2, counted","note":"Her mother reading the day aloud in a Hefei lane; the canary as a repeating piano figure; eleven pages; the fridge at 3:18 stopping; four sentences; then 05:20, with Hefei's 50 Hz under Lafayette's 60.","file":"audio/more_lin.mp3?v=1794470077","env":[0.0,0.437,0.556,0.593,0.593,0.582,0.624,0.57,0.598,0.617,0.607,0.581,0.631,0.51,0.46,0.703,0.763,0.762,0.735,0.666,0.759,0.726,0.624,0.564,0.654,0.757,0.745,0.746,0.703,0.731,0.753,0.682,0.631,0.595,0.776,0.748,0.74,0.695,0.704,0.769,0.684,0.62,0.597,0.733,0.752,0.735,0.715,0.655,0.785,0.732,0.655,0.639,0.624,0.637,0.678,0.727,0.741,0.758,0.757,0.722,0.716,0.727,0.734,0.756,0.737,0.756,0.761,0.747,0.736,0.764,0.737,0.739,0.759,0.736,0.754,0.743,0.731,0.72,0.731,0.724,0.737,0.722,0.739,0.748,0.755,0.749,0.748,0.75,0.749,0.745,0.661,0.715,0.605,0.705,0.687,0.669,0.709,0.637,0.755,0.749,0.74,0.731,0.745,0.74,0.727,0.71,0.714,0.723,0.7,0.697,0.684,0.658,0.691,0.605,0.631,0.641,0.665,0.621,0.516,0.448,0.402,0.513,0.616,0.626,0.581,0.501,0.448,0.495,0.58,0.577,0.548,0.549,0.539,0.533,0.546,0.535,0.492,0.431,0.233,0.0],"dur":90.25},{"en":"Kai","zh":"凯","meta":"life song · Zimmer, the Edge · v2.1, the room rings through the stop","note":"A plucked ostinato at 96 bpm with the depot's servos tuned to it; 看着。别碰。 as a tune, b7 5 4 – | b3 5 4 1; four nights, one drum layer a night, while the company's shore swells in the pads; a beat of silence, then the water early; the vote morning, keys in his hand, 你接着住吧, and the last chord turns major.","file":"audio/more_kai.mp3?v=1794596255","env":[0.392,0.41,0.44,0.432,0.454,0.442,0.474,0.456,0.466,0.449,0.469,0.61,0.632,0.613,0.645,0.643,0.643,0.619,0.611,0.621,0.64,0.623,0.626,0.687,0.661,0.633,0.607,0.675,0.657,0.666,0.645,0.678,0.721,0.681,0.651,0.68,0.649,0.723,0.661,0.675,0.678,0.659,0.704,0.665,0.647,0.691,0.643,0.646,0.695,0.675,0.704,0.653,0.659,0.743,0.689,0.69,0.68,0.671,0.699,0.658,0.657,0.725,0.683,0.732,0.709,0.707,0.72,0.708,0.684,0.682,0.727,0.724,0.704,0.651,0.787,0.756,0.723,0.68,0.746,0.725,0.732,0.701,0.752,0.787,0.73,0.783,0.788,0.802,0.765,0.761,0.764,0.796,0.792,0.75,0.73,0.749,0.743,0.731,0.736,0.731,0.742,0.749,0.731,0.749,0.774,0.643,0.595,0.606,0.596,0.533,0.54,0.578,0.531,0.555,0.571,0.579,0.594,0.592,0.585,0.579,0.568,0.613,0.531,0.531,0.489,0.506,0.485,0.459,0.455,0.452,0.469,0.462,0.437,0.429,0.386,0.252,0.07,0.0,0.0,0.0],"dur":66.9},{"en":"Wen","zh":"文","meta":"life song · 坂本龙一, async · v3, eleven minutes that swell","note":"A shovel in the north slope; eleven seconds of 2015 rain from a dug-up phone; eleven minutes in a stranger's basement; 原来是他; nine minutes; 有始有终.","file":"audio/more_wen.mp3?v=1794596255","env":[0.0,0.529,0.284,0.523,0.377,0.299,0.539,0.329,0.525,0.382,0.304,0.532,0.326,0.524,0.373,0.299,0.377,0.395,0.395,0.736,0.747,0.725,0.741,0.71,0.715,0.666,0.61,0.523,0.509,0.462,0.435,0.767,0.734,0.658,0.721,0.685,0.677,0.625,0.541,0.475,0.42,0.416,0.378,0.633,0.622,0.596,0.667,0.653,0.601,0.659,0.627,0.641,0.691,0.678,0.669,0.702,0.639,0.718,0.746,0.666,0.711,0.735,0.684,0.715,0.764,0.723,0.696,0.759,0.686,0.681,0.707,0.673,0.653,0.681,0.662,0.696,0.651,0.577,0.544,0.647,0.716,0.747,0.731,0.766,0.795,0.803,0.793,0.792,0.771,0.783,0.743,0.724,0.722,0.701,0.716,0.588,0.554,0.569,0.584,0.596,0.593,0.636,0.634,0.599,0.614,0.593,0.594,0.606,0.604,0.558,0.615,0.545,0.626,0.552,0.439,0.483,0.46,0.637,0.595,0.718,0.709,0.667,0.744,0.637,0.596,0.508,0.459,0.423,0.288,0.257,0.293,0.254,0.155,0.084,0.052,0.0,0.0,0.0,0.0,0.0],"dur":73.05},{"en":"Gene","zh":"吉恩","meta":"life song · a violin · v2, counted","note":"A knuckle on spruce; noon, asking the box out loud and being argued with; 看不懂的，别签字; Laramie, eleven days; five fingers smoothed flat at dawn; the box going off at sundown.","file":"audio/more_gene.mp3?v=1794472144","env":[0.0,0.0,0.575,0.329,0.579,0.405,0.57,0.481,0.377,0.577,0.398,0.591,0.411,0.414,0.428,0.424,0.42,0.41,0.397,0.382,0.389,0.248,0.211,0.169,0.146,0.655,0.773,0.748,0.773,0.715,0.767,0.796,0.772,0.752,0.825,0.806,0.827,0.821,0.813,0.684,0.7,0.677,0.675,0.678,0.692,0.685,0.654,0.681,0.761,0.758,0.757,0.761,0.805,0.796,0.788,0.797,0.744,0.621,0.639,0.627,0.677,0.74,0.741,0.753,0.741,0.76,0.772,0.765,0.74,0.738,0.752,0.756,0.725,0.75,0.726,0.712,0.72,0.689,0.703,0.726,0.625,0.649,0.647,0.638,0.606,0.572,0.485,0.588,0.626,0.602,0.614,0.652,0.622,0.657,0.656,0.681,0.672,0.692,0.808,0.824,0.838,0.821,0.835,0.817,0.851,0.852,0.837,0.844,0.827,0.841,0.838,0.8,0.773,0.699,0.727,0.648,0.66,0.674,0.642,0.688,0.658,0.626,0.591,0.521,0.52,0.534,0.524,0.435,0.391,0.424,0.538,0.408,0.393,0.516,0.328,0.208,0.08,0.0,0.0,0.0],"dur":53.9},{"en":"Eighty-Three Minutes (anthem)","zh":"八十三分钟","meta":"Vol. 1 ch. 19 · symphonic rock, after U2 · v3, a real band","note":"The dream cut at 02:00; an organ swell; a chiming guitar through a dotted-eighth delay; toms when the backup fails; bass and drums at the two keys; 我能进来吗 as the anthem; a sixteen-bar guitar solo that quotes it and feeds back into the choir at 03:40; one word at 04:02; everything at 04:48, the guitar on the tune; the door at 05:10. v3 (12 Nov): the band is real: a sampled drum kit, a picked bass guitar, real electric guitars through our own amp for the power chords and the solo, and a real clean guitar for the chiming arpeggio, each set to the level of the sound it replaced. The organ, strings, brass, choir and bells are as they were.","file":"audio/more_anthem83.mp3?v=1794518635","env":[0.158,0.351,0.387,0.4,0.402,0.382,0.245,0.319,0.306,0.314,0.364,0.422,0.375,0.395,0.439,0.449,0.419,0.473,0.541,0.512,0.451,0.492,0.431,0.424,0.435,0.437,0.43,0.412,0.613,0.494,0.529,0.52,0.544,0.548,0.574,0.623,0.657,0.647,0.646,0.665,0.652,0.631,0.65,0.677,0.695,0.696,0.693,0.696,0.657,0.673,0.704,0.721,0.697,0.71,0.679,0.701,0.686,0.698,0.672,0.686,0.682,0.713,0.678,0.667,0.695,0.717,0.697,0.693,0.692,0.693,0.708,0.721,0.701,0.701,0.715,0.721,0.719,0.722,0.709,0.735,0.738,0.736,0.731,0.722,0.719,0.714,0.724,0.708,0.715,0.724,0.731,0.72,0.7,0.719,0.711,0.734,0.74,0.741,0.724,0.776,0.764,0.747,0.704,0.697,0.708,0.701,0.702,0.721,0.708,0.708,0.709,0.73,0.708,0.703,0.509,0.362,0.467,0.672,0.771,0.788,0.783,0.771,0.751,0.753,0.734,0.75,0.75,0.746,0.749,0.736,0.744,0.742,0.62,0.449,0.316,0.219,0.051,0.0,0.0,0.0],"dur":156.9},{"en":"Eighty-Three Minutes (bells)","zh":"八十三分钟","meta":"Vol. 1 ch. 19 · one minute is one second","note":"The first version: the dream cut off, ten minutes of nothing, then a handbell for every sleeper found, rung in the order of a plain hunt; the sheet; the word; the 312th alone; two open strings.","file":"audio/more_eighty_three.mp3?v=1794460801","env":[0.462,0.667,0.677,0.688,0.684,0.694,0.684,0.703,0.69,0.529,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.39,0.507,0.742,0.393,0.083,0.607,0.601,0.648,0.66,0.653,0.684,0.689,0.714,0.669,0.604,0.7,0.659,0.71,0.706,0.708,0.703,0.723,0.714,0.716,0.714,0.725,0.682,0.718,0.69,0.687,0.695,0.702,0.714,0.69,0.73,0.703,0.644,0.684,0.676,0.715,0.718,0.726,0.702,0.701,0.709,0.72,0.691,0.671,0.71,0.699,0.705,0.601,0.654,0.655,0.667,0.671,0.706,0.693,0.713,0.716,0.665,0.493,0.544,0.611,0.586,0.599,0.601,0.656,0.657,0.613,0.48,0.599,0.65,0.535,0.49,0.616,0.547,0.442,0.543,0.544,0.446,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.833,0.763,0.65,0.547,0.448,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.436,0.728,0.775,0.516,0.437,0.342,0.055],"dur":212.0},{"en":"Morels","zh":"羊肚菌","meta":"Vol. 1 ch. 22, the last chapter · a road song after 许巍","note":"Celery Bog after rain, Sunday 7 May 2045. The acoustic strummed with two strings ringing; the band, softly, and a clean guitar that sings the tune; a small bell for one of the last morels; the chorus, and then a second guitar a third under the first, like two pairs of glasses on the oak a finger's width apart; the call from Hefei, where everything drops by 5:6 to the 50 Hz grid and a dizi plays; back home, 我也在 as a tune, twice; the rain.","file":"audio/more_morels.mp3?v=1794472443","env":[0.461,0.651,0.532,0.472,0.408,0.322,0.646,0.565,0.457,0.4,0.318,0.733,0.699,0.715,0.684,0.743,0.74,0.704,0.71,0.704,0.721,0.78,0.767,0.725,0.731,0.774,0.771,0.751,0.73,0.68,0.703,0.747,0.756,0.747,0.714,0.722,0.741,0.735,0.704,0.714,0.698,0.714,0.802,0.742,0.725,0.724,0.79,0.767,0.745,0.7,0.667,0.729,0.785,0.76,0.761,0.717,0.752,0.764,0.738,0.738,0.743,0.746,0.792,0.795,0.758,0.74,0.779,0.787,0.774,0.762,0.717,0.724,0.76,0.801,0.775,0.753,0.733,0.749,0.781,0.724,0.765,0.731,0.753,0.817,0.767,0.751,0.744,0.804,0.793,0.776,0.734,0.706,0.752,0.783,0.758,0.69,0.753,0.649,0.714,0.72,0.644,0.74,0.682,0.676,0.719,0.622,0.684,0.617,0.6,0.731,0.594,0.716,0.71,0.557,0.747,0.723,0.701,0.704,0.742,0.764,0.728,0.725,0.701,0.737,0.764,0.721,0.716,0.657,0.722,0.717,0.662,0.557,0.481,0.433,0.383,0.336,0.236,0.074,0.0,0.0],"dur":77.79},{"en":"Coal","zh":"煤球","meta":"《余烬》 ch. 24–26 · a waltz after 久石让 · v2, a sampled music box and celesta","note":"The cat 煤球 and its Match, the copy that moves and answers exactly like it. Coal's tune on a music box over a waltz; the Match on a celesta one bar behind, exactly, a canon; Coal's diary, both of them with strings; then 13 August: the music box stops two bars before the end, and the Match finishes the tune alone. One low note.","file":"audio/more_coal.mp3?v=1794596255","env":[0.0,0.0,0.533,0.418,0.39,0.674,0.702,0.679,0.687,0.65,0.539,0.528,0.714,0.696,0.681,0.726,0.642,0.647,0.676,0.678,0.669,0.699,0.728,0.603,0.681,0.729,0.705,0.679,0.736,0.724,0.642,0.549,0.685,0.663,0.669,0.734,0.714,0.679,0.728,0.728,0.668,0.677,0.76,0.706,0.734,0.76,0.689,0.73,0.745,0.711,0.724,0.747,0.77,0.736,0.741,0.796,0.779,0.724,0.701,0.646,0.619,0.594,0.702,0.707,0.689,0.748,0.736,0.694,0.742,0.751,0.687,0.694,0.774,0.725,0.746,0.77,0.717,0.745,0.754,0.727,0.723,0.768,0.786,0.743,0.761,0.818,0.799,0.741,0.722,0.668,0.651,0.628,0.704,0.702,0.681,0.727,0.713,0.68,0.731,0.738,0.673,0.682,0.748,0.705,0.73,0.748,0.692,0.721,0.734,0.692,0.684,0.743,0.705,0.663,0.682,0.736,0.756,0.707,0.675,0.6,0.611,0.565,0.63,0.594,0.555,0.504,0.469,0.423,0.395,0.359,0.298,0.277,0.259,0.194,0.107,0.004,0.0,0.0,0.0,0.0],"dur":54.76},{"en":"05:20","zh":"五点二十","meta":"the last page of 《余烬》 · v2, a tune","note":"Remade as a small piece for piano and strings: a bird at dawn; the copy's question, three rising notes; Lin's three sentences, 昨天没下雨。投了票。你也在。, as a tune on the beat over four chords; the other pair's 我也在 on bells, an octave up; once more together, slower; then a pad a pure minor third below the home note, Hefei's grid under Lafayette's.","file":"audio/more_five_twenty.mp3?v=1794471712","env":[0.0,0.0,0.0,0.0,0.286,0.539,0.622,0.592,0.597,0.573,0.667,0.689,0.723,0.711,0.719,0.749,0.757,0.776,0.742,0.71,0.678,0.714,0.673,0.664,0.638,0.615,0.617,0.61,0.637,0.721,0.774,0.75,0.789,0.744,0.791,0.743,0.779,0.754,0.818,0.795,0.778,0.749,0.695,0.735,0.798,0.809,0.804,0.783,0.753,0.755,0.7,0.68,0.695,0.644,0.66,0.755,0.757,0.771,0.796,0.755,0.801,0.741,0.722,0.703,0.732,0.72,0.663,0.661,0.698,0.715,0.654,0.635,0.681,0.754,0.739,0.731,0.729,0.772,0.755,0.75,0.726,0.746,0.689,0.682,0.663,0.616,0.649,0.645,0.642,0.615,0.803,0.752,0.739,0.739,0.78,0.732,0.683,0.686,0.767,0.786,0.731,0.732,0.714,0.753,0.758,0.677,0.664,0.746,0.713,0.728,0.712,0.726,0.721,0.639,0.655,0.747,0.736,0.728,0.74,0.632,0.728,0.777,0.721,0.689,0.634,0.619,0.694,0.585,0.571,0.632,0.461,0.52,0.492,0.313,0.364,0.207,0.053,0.006,0.0,0.0],"dur":54.17},{"en":"Nian","zh":"念","meta":"《焦线》 · after 坂本龙一","note":"处久了，说话就像了: after twenty years a person and their assistant talk alike, and nobody can tell who moved first. Two tunes over the same four chords, Lin's on the piano and the ledger's on a celesta, played four times; each time a third more of their notes change, in both at once, to one tune made of both. By the fourth time they play it together and it is neither one's. Then 念: one two-tone bell, a minor third apart.","file":"audio/more_nian.mp3?v=1794472374","env":[0.0,0.536,0.508,0.516,0.507,0.527,0.498,0.496,0.654,0.764,0.772,0.729,0.698,0.735,0.721,0.75,0.716,0.676,0.685,0.694,0.705,0.693,0.685,0.734,0.731,0.696,0.69,0.684,0.706,0.713,0.701,0.717,0.737,0.721,0.708,0.669,0.603,0.686,0.742,0.704,0.647,0.695,0.753,0.755,0.775,0.725,0.684,0.698,0.738,0.746,0.724,0.713,0.752,0.747,0.718,0.708,0.742,0.735,0.727,0.723,0.736,0.751,0.748,0.728,0.657,0.602,0.753,0.784,0.761,0.705,0.741,0.769,0.76,0.798,0.753,0.705,0.748,0.741,0.757,0.742,0.779,0.787,0.769,0.811,0.764,0.763,0.759,0.746,0.769,0.775,0.778,0.806,0.774,0.686,0.625,0.75,0.787,0.768,0.689,0.744,0.77,0.772,0.806,0.75,0.758,0.8,0.774,0.766,0.765,0.768,0.794,0.785,0.818,0.776,0.758,0.761,0.745,0.773,0.798,0.783,0.758,0.77,0.699,0.642,0.602,0.711,0.72,0.67,0.553,0.524,0.465,0.412,0.431,0.437,0.404,0.276,0.139,0.007,0.0,0.0],"dur":121.84},{"en":"The Twenty-Fifth Hour","zh":"第二十五个钟头","meta":"《明火》 下卷 · symphonic metal, after Sirenia · v2, a more human soprano","note":"Fall-back night, 2057. The county clock strikes one; a harpsichord ticks the hour; a seven-string gallop on 60 Hz with double kick for the league's money; a wordless soprano for 丹妮丝's eyes; the count; the hour, used. At 02:00 the bell strikes two and everything stops, the clock ticks backwards, and the bell strikes one again. Two guitars a third apart; the last chorus a whole step up for Monday at nine; the final chord major. v2, after Gemini's first listen: the distortion no longer fizzes, the cabinet has a thump on the palm mutes, the drummer varies a little, the soprano's pitch moves like a voice, and the rhythm guitars step back under the solo. v3: the guitars are real ones recorded direct into our own amp, the solo too; a real drum kit and bass guitar. (Guitars redone at 16:10 on 12 Nov: the first download of the guitar recordings was damaged, and what played for an hour was mostly noise shaped like a guitar. These are the real strings, in tune to the cent.)","file":"audio/more_twentyfifth.mp3?v=1794517989","env":[0.41,0.49,0.468,0.465,0.472,0.502,0.497,0.493,0.493,0.51,0.514,0.525,0.518,0.519,0.518,0.548,0.588,0.667,0.688,0.698,0.668,0.668,0.676,0.674,0.671,0.681,0.679,0.678,0.666,0.653,0.656,0.665,0.674,0.662,0.67,0.663,0.674,0.646,0.619,0.636,0.628,0.675,0.694,0.649,0.633,0.661,0.687,0.681,0.683,0.686,0.704,0.695,0.736,0.686,0.76,0.707,0.751,0.708,0.73,0.747,0.755,0.747,0.749,0.733,0.721,0.729,0.736,0.743,0.752,0.752,0.732,0.717,0.72,0.704,0.714,0.75,0.758,0.722,0.445,0.476,0.435,0.463,0.723,0.686,0.714,0.677,0.723,0.708,0.718,0.731,0.706,0.684,0.713,0.684,0.695,0.7,0.707,0.681,0.693,0.721,0.727,0.721,0.693,0.736,0.713,0.71,0.683,0.74,0.747,0.758,0.746,0.746,0.742,0.736,0.766,0.762,0.77,0.754,0.751,0.744,0.734,0.747,0.757,0.775,0.75,0.756,0.73,0.746,0.722,0.785,0.748,0.746,0.719,0.646,0.538,0.443,0.36,0.216,0.0,0.0],"dur":130.5},{"en":"Ripples","zh":"涟漪","meta":"《燎原》 · after U2, with a guitar solo · v2, a real guitar","note":"Your picture of 《燎原》: AI is a stone thrown into a pond; the ripples are the era of heroes; the waves die down and it is quiet again. One thud and a note whose echoes spread; an organ alone for a long time; the chiming guitar; toms, then the band; an anthem with a tune of its own; sixteen bars of solo that ends in feedback; the drums leave one by one; the organ, and the last ripple.","file":"audio/more_ripples.mp3?v=1794596255","env":[0.0,0.765,0.662,0.546,0.284,0.0,0.129,0.228,0.251,0.291,0.265,0.286,0.292,0.26,0.319,0.312,0.372,0.353,0.337,0.365,0.379,0.398,0.475,0.465,0.455,0.474,0.471,0.483,0.446,0.468,0.477,0.471,0.464,0.452,0.466,0.455,0.453,0.519,0.523,0.552,0.554,0.574,0.577,0.596,0.658,0.714,0.702,0.679,0.694,0.711,0.709,0.679,0.737,0.742,0.737,0.732,0.744,0.738,0.723,0.735,0.725,0.716,0.737,0.737,0.748,0.727,0.717,0.724,0.725,0.729,0.74,0.745,0.729,0.729,0.726,0.727,0.753,0.737,0.736,0.746,0.735,0.723,0.761,0.792,0.766,0.759,0.759,0.771,0.774,0.778,0.767,0.769,0.778,0.773,0.764,0.772,0.768,0.779,0.787,0.771,0.77,0.768,0.765,0.771,0.758,0.762,0.782,0.771,0.768,0.772,0.784,0.763,0.785,0.785,0.757,0.75,0.678,0.603,0.445,0.413,0.376,0.343,0.31,0.304,0.31,0.267,0.046,0.0,0.0,0.212,0.271,0.297,0.275,0.533,0.398,0.206,0.079,0.0,0.0,0.0],"dur":138.84},{"en":"Turning the Coals","zh":"拨灰","meta":"《封火》 · after 窦唯, 《黑梦》 · v1.1, the ending comes in softly","note":"One man fetches the plague years' records by hand every night, 45 a night, so each is kept one more year; 管家 lays the ash and writes its night notes. The transformer hum and a clock at 23:00; a fingered bass that grooves in the dark, dry drums, a clean guitar on the off-beats, an electric piano, a saxophone talking to itself. Eleven minutes on 13 February: bass and hi-hat, the flat fifth, a pen. The kestrel on tower three. July 2044: the sound closes in like smoke and the fetching stops mid-bar; 管家 waits one extra second; then the piano, the sax, the hum.","file":"audio/more_coals.mp3?v=1794596255","env":[0.527,0.66,0.656,0.621,0.646,0.645,0.629,0.665,0.67,0.679,0.671,0.69,0.685,0.677,0.702,0.761,0.767,0.747,0.785,0.772,0.786,0.752,0.753,0.743,0.759,0.743,0.748,0.751,0.744,0.755,0.755,0.759,0.782,0.784,0.792,0.765,0.756,0.752,0.761,0.74,0.739,0.78,0.757,0.615,0.611,0.593,0.691,0.746,0.727,0.706,0.699,0.699,0.669,0.706,0.738,0.722,0.707,0.673,0.714,0.697,0.723,0.766,0.758,0.773,0.746,0.734,0.737,0.73,0.715,0.663,0.68,0.68,0.642,0.662,0.677,0.719,0.694,0.737,0.718,0.695,0.7,0.761,0.762,0.758,0.789,0.788,0.797,0.76,0.764,0.749,0.778,0.748,0.76,0.765,0.748,0.747,0.745,0.754,0.74,0.732,0.751,0.744,0.76,0.757,0.781,0.741,0.76,0.773,0.756,0.747,0.761,0.764,0.737,0.753,0.747,0.695,0.658,0.674,0.66,0.615,0.638,0.44,0.065,0.0,0.0,0.0,0.174,0.498,0.566,0.605,0.588,0.585,0.597,0.559,0.493,0.471,0.412,0.312,0.146,0.0],"dur":105.24},{"en":"Three O'Clock","zh":"三点","meta":"Mira · after Arvo Pärt, Für Alina · v4, a real piano","note":"该睡了。会的。One bar a night, a clock on every other beat. Her three falling notes, E C A, the same each night while the bass goes A, F, D, E, so they sound like home, then warm, then wistful, then unresolved; his answer is her last two notes an octave down. A year and a half of him saying 确认 and sleeping; the last night, nothing at 01:17; a lamp left on; her three notes at half speed, and nobody answers. After Arvo Pärt's Für Alina (18 Nov): the two of them are now two voices on one real piano, played quietly and left to ring over a single low octave each night; from the fifth year a second, softer voice sounds under hers. Piano: Salamander Grand Piano by Alexander Holm, a Yamaha C5, CC-BY 3.0.","file":"audio/more_mira_theme.mp3?v=1794981749","env":[0.0,0.238,0.546,0.392,0.397,0.392,0.377,0.486,0.686,0.446,0.443,0.358,0.316,0.528,0.683,0.649,0.65,0.63,0.623,0.646,0.72,0.668,0.685,0.678,0.655,0.638,0.693,0.698,0.698,0.677,0.641,0.621,0.681,0.674,0.662,0.649,0.613,0.704,0.697,0.692,0.682,0.657,0.658,0.666,0.718,0.733,0.704,0.664,0.63,0.698,0.747,0.722,0.735,0.708,0.671,0.717,0.751,0.727,0.699,0.695,0.661,0.689,0.638,0.67,0.648,0.583,0.54,0.618,0.617,0.662,0.617,0.553,0.515,0.659,0.684,0.667,0.624,0.571,0.558,0.651,0.666,0.661,0.632,0.571,0.564,0.578,0.443,0.424,0.383,0.349,0.564,0.596,0.499,0.514,0.506,0.416,0.57,0.538,0.449,0.512,0.469,0.358,0.544,0.469,0.387,0.407,0.476,0.455,0.528,0.556,0.538,0.538,0.521,0.509,0.584,0.659,0.557,0.64,0.58,0.638,0.639,0.548,0.522,0.494,0.482,0.461,0.446,0.464,0.426,0.412,0.403,0.406,0.429,0.446,0.404,0.405,0.405,0.406,0.43,0.438],"dur":71.0},{"en":"Long Lamp","zh":"长明","meta":"Mira · after 《长明》 · v2, after Vangelis","note":"Remade: no more syllables turned into pitches. Seven chapters, each a third the length of the one before, become seven sections of four bars, each three times slower than the last: an arpeggio nine notes to a beat, then three, then one, then one every three beats, then one in nine; the sixth is the lamp alone; the seventh is her call from Three O'Clock, 该睡了. CS-80 pads move through Three O'Clock's four chords; the lamp, a soft 180 Hz, never goes out.","file":"audio/more_changming.mp3?v=1794472522","env":[0.0,0.295,0.43,0.68,0.743,0.784,0.799,0.815,0.738,0.682,0.688,0.669,0.699,0.709,0.697,0.703,0.673,0.649,0.667,0.677,0.684,0.764,0.808,0.825,0.83,0.83,0.77,0.74,0.749,0.724,0.746,0.754,0.749,0.756,0.765,0.766,0.771,0.758,0.773,0.763,0.741,0.713,0.74,0.773,0.739,0.727,0.711,0.716,0.747,0.739,0.73,0.725,0.712,0.728,0.744,0.726,0.746,0.727,0.731,0.761,0.786,0.765,0.69,0.673,0.708,0.689,0.74,0.723,0.729,0.748,0.706,0.732,0.74,0.73,0.734,0.759,0.782,0.764,0.753,0.727,0.706,0.681,0.685,0.69,0.726,0.712,0.72,0.74,0.719,0.704,0.734,0.731,0.733,0.776,0.792,0.758,0.755,0.716,0.675,0.679,0.677,0.687,0.686,0.677,0.672,0.673,0.691,0.692,0.691,0.695,0.729,0.718,0.731,0.686,0.658,0.596,0.56,0.565,0.549,0.549,0.534,0.549,0.528,0.539,0.522,0.529,0.53,0.524,0.53,0.513,0.519,0.484,0.498,0.468,0.448,0.4,0.31,0.222,0.009,0.0],"dur":92.96},{"en":"Condense","zh":"压缩","meta":"the nightly cut · v2, slower, in 9/8","note":"A tune of 81 notes in nine bars of 9/8, a low pluck on every dotted quarter, cut to a third each night: 81, 27, 9; the five-note canary kept whatever the budget. Each cut heard twice, in place with a tick for every lost note, then closed up. Another hand adds a line; a second day starts from the canary.","file":"audio/more_condense.mp3?v=1794468746","env":[0.193,0.658,0.754,0.776,0.773,0.785,0.767,0.783,0.735,0.762,0.771,0.774,0.78,0.821,0.777,0.78,0.784,0.777,0.808,0.773,0.756,0.765,0.777,0.776,0.748,0.75,0.75,0.702,0.651,0.656,0.671,0.664,0.692,0.657,0.683,0.663,0.651,0.675,0.658,0.71,0.788,0.742,0.649,0.675,0.666,0.682,0.667,0.645,0.68,0.681,0.655,0.652,0.643,0.655,0.756,0.809,0.785,0.81,0.774,0.771,0.755,0.772,0.763,0.563,0.662,0.59,0.693,0.767,0.724,0.68,0.591,0.619,0.69,0.782,0.764,0.737,0.563,0.767,0.734,0.666,0.772,0.698,0.584,0.513,0.563,0.766,0.773,0.772,0.782,0.775,0.786,0.765,0.779,0.743,0.76,0.773,0.774,0.78,0.788,0.785,0.791,0.806,0.755,0.763,0.77,0.776,0.776,0.739,0.752,0.763,0.729,0.727,0.767,0.773,0.816,0.781,0.785,0.813,0.751,0.797,0.726,0.769,0.762,0.761,0.716,0.767,0.722,0.673,0.722,0.707,0.694,0.699,0.637,0.436,0.302,0.285,0.24,0.147,0.0,0.0],"dur":134.4}];
+
+/* ---------- small helpers ---------- */
+const $ = id => document.getElementById(id);
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, u) => a + (b - a) * u;
+function interp(x, xs, ys) {
+  if (x <= xs[0]) return ys[0];
+  for (let i = 1; i < xs.length; i++) if (x <= xs[i]) return lerp(ys[i - 1], ys[i], (x - xs[i - 1]) / (xs[i] - xs[i - 1]));
+  return ys[ys.length - 1];
+}
+const mmss = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function dateFrom(y, m, d, offset) {
+  const dt = new Date(Date.UTC(y, m - 1, d) + Math.round(offset) * 864e5);
+  return dt.getUTCDate() + ' ' + MONTHS[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear();
+}
+function tokens(el) {
+  const cs = getComputedStyle(el);
+  const g = n => cs.getPropertyValue(n).trim();
+  return { field: g('--field'), mark: g('--mark'), hot: g('--hot') };
+}
+function fit(canvas) {
+  const r = canvas.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: r.width, h: r.height };
+}
+
+/* ---------- 1. Sixty-Four: one eight-bar tune, sixty-four steps ---------- */
+const S_LOOP = 64 * SIXTY.step;
+const S_END = SIXTY.loops[SIXTY.loops.length - 1].t0 + S_LOOP;
+function drawSixty(canvas, t) {
+  const { ctx, w, h } = fit(canvas), c = tokens(canvas);
+  ctx.clearRect(0, 0, w, h);
+  const size = Math.min(w, h) * 0.84, cell = size / 8, x0 = (w - size) / 2, y0 = (h - size) / 2, r = cell * 0.27;
+  const L = SIXTY.loops;
+  let phase, idx = 0, step = -1, n = 0, since = 1e9;
+  if (t < SIXTY.lead) phase = 'pre';
+  else if (t < S_END) { phase = 'loop'; idx = Math.min(L.length - 1, Math.floor((t - SIXTY.lead) / S_LOOP)); step = Math.floor((t - L[idx].t0) / SIXTY.step); }
+  else if (t < SIXTY.tutti[0]) { phase = 'wait'; idx = L.length - 1; step = 64; }
+  else if (t < SIXTY.gap[0]) { phase = 'tutti'; since = t - (t >= SIXTY.tutti[1] ? SIXTY.tutti[1] : SIXTY.tutti[0]); }
+  else if (t < SIXTY.gap[1]) phase = 'gap';
+  else { phase = 'coda'; n = Math.min(64, Math.floor((t - SIXTY.coda.t0) / SIXTY.coda.step) + 1); }
+  if (phase === 'loop' && step >= 0 && step < 64) {
+    ctx.globalAlpha = 0.10; ctx.fillStyle = c.mark;
+    ctx.fillRect(x0, y0 + Math.floor(step / 8) * cell, size, cell);
+  }
+  for (let i = 0; i < 64; i++) {
+    const cx = x0 + (i % 8 + 0.5) * cell, cy = y0 + (Math.floor(i / 8) + 0.5) * cell;
+    let st, age = 1e9, dim = 1;
+    if (phase === 'pre') st = L[0].state[i];
+    else if (phase === 'loop' || phase === 'wait') {
+      st = L[idx].state[i];
+      if (i <= step) age = t - (L[idx].t0 + i * SIXTY.step);
+      else if (idx > 0 && L[idx - 1].state[i] === st) age = t - (L[idx - 1].t0 + i * SIXTY.step);
+    }
+    else if (phase === 'tutti') { st = 'A'; age = since; }
+    else if (phase === 'gap') { st = 'A'; dim = 0.3; }
+    else { st = i < n ? 'O' : 'A'; if (i < n) age = t - (SIXTY.coda.t0 + i * SIXTY.coda.step); else dim = 0.3; }
+    ctx.lineWidth = 1.5;
+    if (st === '-') {
+      ctx.globalAlpha = 0.3; ctx.fillStyle = c.mark;
+      ctx.beginPath(); ctx.arc(cx, cy, 1.6, 0, 6.2832); ctx.fill();
+    } else if (st === 'B') {
+      const p = clamp(1 - age / 0.3, 0, 1);
+      ctx.globalAlpha = 0.5 + 0.5 * p; ctx.strokeStyle = c.mark;
+      ctx.beginPath(); ctx.arc(cx, cy - p * r * 0.35, r * (0.8 + 0.35 * p), 0, 6.2832); ctx.stroke();
+    } else if (st === 'A') {
+      const p = clamp(1 - age / (phase === 'tutti' ? 5 : 2), 0, 1);
+      ctx.globalAlpha = (0.8 + 0.2 * p) * dim; ctx.fillStyle = c.mark;
+      ctx.beginPath(); ctx.arc(cx, cy, r * (0.82 + 0.3 * p * p), 0, 6.2832); ctx.fill();
+      if (p > 0.02) {
+        ctx.globalAlpha = p; ctx.strokeStyle = c.hot; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(cx, cy, r * (1.25 + 0.55 * (1 - p)), 0, 6.2832); ctx.stroke();
+      }
+    } else {
+      const p = phase === 'coda' ? 1 : clamp(1 - age / 2.6, 0, 1);
+      ctx.globalAlpha = 0.6 + 0.4 * p; ctx.strokeStyle = c.mark; ctx.fillStyle = p > 0.02 ? c.hot : c.mark;
+      ctx.beginPath(); ctx.arc(cx, cy, r * 1.08, 0, 6.2832); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, r * (0.42 + 0.12 * p), 0, 6.2832); ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+  let line;
+  if (phase === 'pre') line = 'before 5 May 2045 · 别 63 · the last step is a rest';
+  else if (phase === 'loop' || phase === 'wait') {
+    const k = L[idx].counts;
+    line = L[idx].label + ' · 别 ' + k[0] + ' · 问 ' + k[1] + ' · 其他 ' + k[2] + (phase === 'loop' ? ' · bar ' + (Math.floor(step / 8) + 1) + ' of 8' : '');
+  }
+  else if (phase === 'tutti') line = '7 Nov 2046, 04:02 · 问 64 · the same word in the same second';
+  else if (phase === 'gap') line = 'eighteen years · only the grid';
+  else line = '7 Nov 2064, 04:02 · 其他 ' + n + ' · the tune is held';
+  $('l-sixty').innerHTML = '<b>墙那边</b> · ' + line;
+}
+
+/* ---------- 2. Ninety Sentences ---------- */
+const N_NOTES = [];   // {t, f, kind: 'q' | 'lin' | 'mem' | 'ans', day, slot, k}
+const N_DAYS = [];    // {t0, len}
+(function buildNinety() {
+  const Q = [360, 432, 480], TM = NINETY.timing;
+  const told = [];
+  for (let d = 1; d <= 30; d++) {
+    const t0 = TM.day_t0[d - 1], len = (d < 30 ? TM.day_t0[d] : NINETY.coda) - t0;
+    N_DAYS.push({ t0, len });
+    Q.forEach((f, k) => N_NOTES.push({ t: t0 + TM.q_off + k * TM.q_step, f, kind: 'q', day: d, k }));
+    const ph = NINETY.days[d - 1];
+    if (ph) {
+      let tp = t0 + TM.lin_off, idx = 0;
+      ph.forEach((notes, j) => {
+        notes.forEach(f => { N_NOTES.push({ t: tp, f, kind: 'lin', day: d, k: idx, group: j }); tp += TM.step; idx++; });
+        tp += TM.gap; idx += 1.3;
+      });
+      told.push(ph[0][0]);
+    } else told.push(null);
+    told.forEach((f, k) => { if (f !== null) N_NOTES.push({ t: t0 + TM.mem_off + k * TM.mem_step, f, kind: 'mem', day: d, slot: k }); });
+  }
+  let ta = NINETY.coda + TM.ans_off, k = 0;
+  NINETY.days.forEach(ph => { if (ph) ph.forEach(notes => notes.forEach(f => { N_NOTES.push({ t: ta, f, kind: 'ans', k }); ta += TM.ans_step; k++; })); });
+})();
+const pitchY = (f, top, bot) => lerp(bot, top, Math.log2(f / 240) / 2);
+function drawNinety(canvas, t) {
+  const { ctx, w, h } = fit(canvas), c = tokens(canvas);
+  ctx.clearRect(0, 0, w, h);
+  const coda = t >= NINETY.coda;
+  let d = 1;
+  for (let i = 0; i < 30; i++) if (t >= N_DAYS[i].t0) d = i + 1;
+  const padX = w * 0.07, top = h * 0.12, mid = h * 0.60, rowY = h * 0.80;
+  const slotW = (w - 2 * padX) / 30;
+  // the row of thirty places: everything it has
+  for (let k = 0; k < 30; k++) {
+    const x = padX + (k + 0.5) * slotW;
+    const ph = NINETY.days[k];
+    ctx.globalAlpha = 0.35; ctx.fillStyle = c.mark;
+    ctx.fillRect(x - 0.5, rowY + h * 0.085, 1, k % 5 === 4 ? 7 : 4);
+    if (!ph) {
+      if (k + 1 <= d || coda) { ctx.globalAlpha = 0.8; ctx.strokeStyle = c.mark; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x - 4, rowY); ctx.lineTo(x + 4, rowY); ctx.stroke(); }
+      continue;
+    }
+    const has = coda || k + 1 < d || (k + 1 === d && t >= N_DAYS[d - 1].t0 + NINETY.timing.mem_off);
+    if (!has) continue;
+    const y = pitchY(ph[0][0], rowY - h * 0.07, rowY + h * 0.07);
+    let lit = 0;
+    if (!coda) { const tm = N_DAYS[d - 1].t0 + NINETY.timing.mem_off + k * NINETY.timing.mem_step; lit = clamp(1 - (t - tm) / 0.9, 0, 1) * (t >= tm ? 1 : 0); }
+    ctx.globalAlpha = 1; ctx.fillStyle = lit > 0.02 ? c.hot : c.mark;
+    ctx.beginPath(); ctx.arc(x, y, 3 + 2.5 * lit, 0, 6.2832); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  if (!coda) {
+    // this morning: the question, then her three sentences
+    const day = N_DAYS[d - 1], notes = N_NOTES.filter(n => n.day === d && n.kind !== 'mem');
+    const span = w - 2 * padX, qx = padX, lx = padX + span * 0.16, stepX = (span * 0.84) / 17.5;
+    notes.forEach(n => {
+      const done = t >= n.t, p = clamp(1 - (t - n.t) / 0.8, 0, 1) * (done ? 1 : 0);
+      if (n.kind === 'q') {
+        const x = qx + n.k * span * 0.04, y = pitchY(n.f, top, mid), s = 5;
+        ctx.globalAlpha = done ? 0.95 : 0.3; ctx.strokeStyle = c.mark; ctx.lineWidth = 1.5;
+        ctx.strokeRect(x - s, y - s, 2 * s, 2 * s);
+        if (p > 0.02) { ctx.globalAlpha = p; ctx.fillStyle = c.hot; ctx.fillRect(x - s, y - s, 2 * s, 2 * s); }
+      } else {
+        const x = lx + n.k * stepX, y = pitchY(n.f, top, mid);
+        if (done) { ctx.globalAlpha = 1; ctx.fillStyle = p > 0.02 ? c.hot : c.mark; ctx.beginPath(); ctx.arc(x, y, 5.5 + 3 * p, 0, 6.2832); ctx.fill(); }
+        else { ctx.globalAlpha = 0.32; ctx.strokeStyle = c.mark; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, 5.5, 0, 6.2832); ctx.stroke(); }
+      }
+    });
+    ctx.globalAlpha = 1;
+    const told = NINETY.days.slice(0, d).filter(Boolean).length - (NINETY.days[d - 1] && t < day.t0 + NINETY.timing.mem_off ? 1 : 0);
+    const note = !NINETY.days[d - 1] ? ' · nobody reads' : (d === 15 || d === 25) ? ' · the same three sentences as ' + (d === 15 ? '1 June' : '22 May') : d === 30 ? ' · read to both pairs' : '';
+    $('l-ninety').innerHTML = '<b>' + dateFrom(2045, 5, 8, d - 1) + ', 05:20</b> · morning ' + d + ' of 30 · it has ' + Math.max(0, told) + (Math.max(0, told) === 1 ? ' day' : ' days') + note;
+  } else {
+    // 7 June: the other one starts to answer in full
+    const ans = N_NOTES.filter(n => n.kind === 'ans');
+    const cols = 57, cw = (w - 2 * padX) / cols, rows = Math.ceil(ans.length / cols), rh = (mid - top) / rows;
+    let said = 0;
+    ans.forEach(n => {
+      const x = padX + (n.k % cols + 0.5) * cw, y = top + (Math.floor(n.k / cols) + 0.5) * rh;
+      const done = t >= n.t, p = clamp(1 - (t - n.t) / 0.5, 0, 1) * (done ? 1 : 0);
+      if (done) said++;
+      ctx.globalAlpha = done ? 1 : 0.25; ctx.fillStyle = p > 0.02 ? c.hot : c.mark;
+      ctx.beginPath(); ctx.arc(x, y, done ? 2.6 + 2 * p : 1.6, 0, 6.2832); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    $('l-ninety').innerHTML = '<b>7 June 2045, 05:20</b> · “And what happened to you yesterday?” · ' + said + ' of ' + ans.length + ' notes said · she has time';
+  }
+}
+
+/* ---------- 3. Seasoning: an XY scope reading the sound file itself ---------- */
+const XY = { state: 'idle' };
+function loadXY() {
+  if (XY.state !== 'idle') return;
+  XY.state = 'loading';
+  fetch('audio/seasoning_xy_v3.mp3?v=2')
+    .then(r => { if (!r.ok) throw new Error('fetch'); return r.arrayBuffer(); })
+    .then(ab => { const C = window.OfflineAudioContext || window.webkitOfflineAudioContext; return new C(2, 44100, 44100).decodeAudioData(ab); })
+    .then(buf => { const G = 2.6303, up = a => Float32Array.from(a, v => v * G);   // the file is played 8.4 dB quieter than it was drawn; the trace keeps its size
+      XY.L = up(buf.getChannelData(0)); XY.R = buf.numberOfChannels > 1 ? up(buf.getChannelData(1)) : XY.L; XY.sr = buf.sampleRate; XY.state = 'ready'; })
+    .catch(() => { XY.state = 'failed'; })
+    .finally(() => { const tr = TRACKS.find(x => x.id === 'seasoning'); if (tr) tr.render(); });
+}
+function seasonLine(t) {
+  const S = SEASON, ev = S.events;
+  let last = null;
+  for (let i = 0; i < ev.length; i++) { if (ev[i][0] <= t + 1e-3) last = ev[i]; else break; }
+  if (t < S.wafers) return '<b>Cold chamber</b> · a new focus ring, hungry · 480 over 120 Hz = 4:1 · 5 petals · turning';
+  if (t < S.ring) {
+    const n = Math.min(12, Math.floor((t - S.wafers) / (8 * S.beat)) + 1);
+    let tail = '';
+    if (last && last[1] === 'line') tail = last[2] < 0.005 ? ' · the fluorine line: flat' : ' · the fluorine line: not flat yet';
+    else if (last && last[1] === 'flower') tail = ' · ' + Math.round(60 * last[2]) + ' over ' + last[4] + ' Hz = ' + last[6] + ' · ' + last[5] + ' petals · ' + (Math.abs(last[7]) > 0.02 ? 'turning' : 'still');
+    else if (last && last[1] === 'knock') tail = ' · knock, Q ' + Math.round(last[2]).toLocaleString('en-US');
+    return '<b>Dummy wafer ' + n + ' of 12</b>' + tail;
+  }
+  if (t < S.num) return '<b>Lot 4417</b> · microring layer · ' + (last && last[1] === 'ring' ? (60 * last[2]) + ' Hz, one pure circle' : '') + ' · no decay';
+  if (t < S.bell) return '<b>4417</b>';
+  return t < S.bell + 6 ? '<b>The bell</b> · rung, logged' : '<b>The bell</b> · the beam at rest';
+}
+function drawSeasoning(canvas, t, live) {
+  const { ctx, w, h } = fit(canvas), c = tokens(canvas);
+  ctx.globalCompositeOperation = 'source-over';
+  if (live) { ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = 0.38; ctx.fillRect(0, 0, w, h); ctx.globalCompositeOperation = 'source-over'; }
+  else ctx.clearRect(0, 0, w, h);
+  ctx.globalAlpha = 1;
+  $('l-seasoning').innerHTML = XY.state === 'failed' ? 'The trace could not be read from the sound file here. Played into a real scope in XY mode, the sound draws the same pictures.' : XY.state !== 'ready' ? 'Reading the trace from the sound file…' : seasonLine(t);
+  if (XY.state !== 'ready') return;
+  const side = Math.min(w, h) * 0.9, cx = w / 2, cy = h / 2, k = side / 2;
+  const span = live ? 1 / 30 : 1 / 18;
+  const i1 = Math.min(XY.L.length - 1, Math.floor(t * XY.sr)), i0 = Math.max(0, i1 - Math.floor(span * XY.sr));
+  const B = [new Path2D(), new Path2D(), new Path2D(), new Path2D()], A = [1, 0.72, 0.36, 0.12];
+  let px = cx + XY.L[i0] * k, py = cy - XY.R[i0] * k;
+  for (let i = i0 + 1; i <= i1; i++) {
+    const x = cx + XY.L[i] * k, y = cy - XY.R[i] * k, d = Math.abs(x - px) + Math.abs(y - py);
+    const b = d < 1.6 ? 0 : d < 4 ? 1 : d < 12 ? 2 : 3;
+    B[b].moveTo(px, py); B[b].lineTo(x, y);
+    px = x; py = y;
+  }
+  ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = c.mark; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+  for (let b = 3; b >= 0; b--) { ctx.globalAlpha = A[b]; ctx.stroke(B[b]); }
+  if (i1 - i0 > 0) {
+    let q = 0;
+    for (let i = i0; i <= i1; i++) q += Math.abs(XY.L[i]) + Math.abs(XY.R[i]);
+    if (q / (i1 - i0 + 1) < 0.004) { ctx.globalAlpha = 0.9; ctx.fillStyle = c.mark; ctx.beginPath(); ctx.arc(cx, cy, 2.2, 0, 6.2832); ctx.fill(); }
+  }
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+}
+
+/* ---------- 4. One Pixel ---------- */
+const YEAR = 268.6, DAY = 23 + 56 / 60;
+function light(t) {
+  const orb = 0.5 - 0.5 * Math.cos(2 * Math.PI * t / YEAR);
+  const depth = interp(t, [0, YEAR * 2 / 3, YEAR * 0.8, YEAR], [0.015, 0.02, 0.10, 0.16]);
+  return clamp((0.22 + 0.78 * Math.pow(orb, 0.9)) * (1 + depth * Math.cos(2 * Math.PI * t / DAY)), 0, 1.2);
+}
+function rnd(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+function drawPixel(canvas, t) {
+  const { ctx, w, h } = fit(canvas), c = tokens(canvas);
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.36, L = light(Math.min(t, YEAR)), third = YEAR / 3;
+  const prior = t < third ? 1 : t < 2 * third - 6 ? 2 : 0;
+  const fade = prior === 2 ? interp(t, [2 * third - 30, 2 * third - 6], [1, 0]) : 1;
+  if (prior) {
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.clip();
+    const seed = prior === 1 ? 3072 : 3072 + 7 * Math.floor(t / 11);
+    const r = rnd(seed), n = prior === 1 ? 7 : 16;
+    for (let i = 0; i < n; i++) {
+      const a = r() * 6.2832, d = Math.sqrt(r()) * R * 0.8, rr = R * (prior === 1 ? 0.22 + r() * 0.3 : 0.3 + r() * 0.45);
+      const x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d * 0.8;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, rr);
+      g.addColorStop(0, c.hot); g.addColorStop(prior === 1 ? 0.55 : 0.2, c.hot); g.addColorStop(1, 'transparent');
+      ctx.globalAlpha = (prior === 1 ? 0.5 : 0.13) * (0.25 + 0.75 * L) * fade; ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.2832); ctx.fill();
+    }
+    ctx.restore();
+    ctx.globalAlpha = 0.35 * fade; ctx.strokeStyle = c.hot; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.stroke();
+  }
+  const s = Math.max(6, Math.round(Math.min(w, h) * 0.022));
+  const flash = t > 0.5 && t < YEAR ? Math.exp(-(((t - 0.5) % 1 + 1) % 1) / 0.25) : 0;
+  ctx.globalAlpha = 1; ctx.fillStyle = c.field; ctx.fillRect(cx - s, cy - s, 2 * s, 2 * s);
+  ctx.globalAlpha = clamp(L * (0.55 + 0.45 * flash), 0.06, 1); ctx.fillStyle = c.mark; ctx.fillRect(cx - s / 2, cy - s / 2, s, s);
+  ctx.globalAlpha = 1;
+  const hour = Math.min(t, YEAR);
+  const what = prior === 1 ? 'a prior that has seen Earth' : prior === 2 ? 'the prior swapped · every note within ±2.6%' : 'no prior · listen for 23 h 56 min';
+  $('l-pixel').innerHTML = '<b>Hour ' + hour.toFixed(0) + ' of 268.6</b> · brightness ' + (L * 100).toFixed(0) + '% · ' + what;
+}
+
+/* ---------- 5. 01:17 ---------- */
+function drawVoss(canvas, t) {
+  const { ctx, w, h } = fit(canvas), c = tokens(canvas);
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.38;
+  const paid = t < VOSS.ticks ? 0 : Math.min(203, Math.floor((t - VOSS.ticks) / 0.3) + 1);
+  const dark = t >= VOSS.dark && t < VOSS.county ? clamp((t - VOSS.dark) / 2, 0, 1) * 0.7 : 0;
+  for (let i = 0; i < 204; i++) {
+    const a = -Math.PI / 2 + i / 204 * 2 * Math.PI, inner = R * (i % 30 === 0 ? 0.86 : 0.92);
+    const x0 = cx + Math.cos(a) * inner, y0 = cy + Math.sin(a) * inner, x1 = cx + Math.cos(a) * R, y1 = cy + Math.sin(a) * R;
+    const lit = i < paid, fresh = lit && i === paid - 1 && t < VOSS.t204;
+    ctx.strokeStyle = fresh ? c.hot : c.mark; ctx.lineWidth = fresh ? 2.4 : 1.4;
+    ctx.globalAlpha = (lit ? 0.95 : (i === 203 ? 0.5 : 0.16)) * (1 - dark);
+    if (i === 203) { ctx.setLineDash([2, 3]); }
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); ctx.setLineDash([]);
+  }
+  if (t >= VOSS.county) {
+    const a = -Math.PI / 2 + 203 / 204 * 2 * Math.PI, p = clamp((t - VOSS.county) / 1.5, 0, 1);
+    ctx.globalAlpha = p; ctx.fillStyle = c.hot;
+    ctx.beginPath(); ctx.arc(cx + Math.cos(a) * R * 1.07, cy + Math.sin(a) * R * 1.07, 3.5, 0, 6.2832); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  let line;
+  if (t < VOSS.theme) line = '<b>Rain on the garage roof</b> · 60 Hz';
+  else if (t < VOSS.ticks) line = '<b>确认</b> · què rèn · two falls';
+  else if (t < VOSS.t204) line = '<b>Night ' + paid + ' of 203</b> · 01:17 · 确认';
+  else if (t < VOSS.dark) line = '<b>Night 204</b> · 01:17 · nothing';
+  else if (t < VOSS.next) line = '<b>02:00</b> · hall 7 goes dark';
+  else if (t < VOSS.county) line = '<b>The next night</b>';
+  else line = '<b>01:17</b> · the county pays';
+  $('l-voss').innerHTML = line;
+}
+
+/* ---------- transport ---------- */
+const TRACKS = [
+  { id: 'sixty', src: 'audio/sixty_four_v2.mp3?v=2', dur: 174.1, draw: drawSixty },
+  { id: 'ninety', src: 'audio/ninety_sentences.mp3?v=2', dur: 348, draw: drawNinety },
+  { id: 'seasoning', src: 'audio/seasoning_xy_v3.mp3?v=2', dur: 84.4, draw: drawSeasoning },
+  { id: 'pixel', src: 'audio/one_pixel_v2.mp3?v=2', dur: 276.6, draw: drawPixel },
+  { id: 'voss', src: 'audio/voss_0117.mp3?v=2', dur: 124.1, draw: drawVoss },
+];
+let raf = 0;
+TRACKS.forEach(tr => {
+  tr.canvas = $('c-' + tr.id); tr.btn = $('b-' + tr.id); tr.range = $('r-' + tr.id); tr.clock = $('k-' + tr.id);
+  tr.audio = new Audio(); tr.audio.preload = 'none'; tr.audio.src = tr.src; tr.t = 0; tr.playing = false;
+  tr.render = () => { tr.draw(tr.canvas, tr.t, tr.playing); tr.clock.textContent = mmss(tr.t) + ' / ' + mmss(tr.dur); };
+  tr.btn.addEventListener('click', () => {
+    if (tr.playing) { tr.audio.pause(); return; }
+    document.querySelectorAll('.slip button').forEach(b => { if (b.textContent === 'Pause') b.click(); });
+    TRACKS.forEach(o => { if (o !== tr && o.playing) o.audio.pause(); });
+    if (tr.fresh || tr.t >= tr.dur - 0.2) tr.t = 0;
+    tr.fresh = false;
+    try { tr.audio.currentTime = tr.t; } catch (e) {}
+    const p = tr.audio.play();
+    if (p && p.catch) p.catch(() => { tr.btn.textContent = 'Play'; $('l-' + tr.id).textContent = 'The sound did not load. The drawing still follows the slider.'; });
+  });
+  tr.audio.addEventListener('loadedmetadata', () => { if (Math.abs(tr.audio.currentTime - tr.t) > 0.5) { try { tr.audio.currentTime = tr.t; } catch (e) {} } });
+  tr.audio.addEventListener('play', () => { tr.playing = true; tr.btn.textContent = 'Pause'; loop(); });
+  tr.audio.addEventListener('pause', () => { tr.playing = false; tr.btn.textContent = 'Play'; });
+  tr.audio.addEventListener('ended', () => { tr.playing = false; tr.btn.textContent = 'Play'; });
+  tr.range.addEventListener('input', () => {
+    tr.t = parseFloat(tr.range.value); tr.fresh = false;
+    try { if (tr.audio.readyState > 0 || tr.playing) tr.audio.currentTime = tr.t; } catch (e) {}
+    tr.render();
+  });
+  new ResizeObserver(() => tr.render()).observe(tr.canvas);
+});
+function loop() {
+  cancelAnimationFrame(raf);
+  const step = () => {
+    let any = false;
+    TRACKS.forEach(tr => {
+      if (!tr.playing) return;
+      any = true; tr.t = Math.min(tr.audio.currentTime, tr.dur); tr.range.value = tr.t; tr.render();
+    });
+    if (any) raf = requestAnimationFrame(step);
+  };
+  raf = requestAnimationFrame(step);
+}
+// resting frames: each plate opens on a moment worth looking at
+[['sixty', 76], ['ninety', 104], ['seasoning', 61], ['pixel', 60], ['voss', 70]].forEach(([id, t]) => {
+  const tr = TRACKS.find(x => x.id === id); tr.t = t; tr.range.value = t; tr.fresh = true;
+});
+/* ---------- more: simple slips ---------- */
+(function () {
+  const au = new Audio(); au.preload = 'none';
+  let cur = null, raf2 = 0;
+  const host = $('more');
+  function paint(m) {
+    const cv = m.cv, r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+    const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
+    const cs = getComputedStyle(document.documentElement), fg = cs.getPropertyValue('--fg').trim(), hot = cs.getPropertyValue('--pomegranate').trim();
+    const n = m.env.length, bw = r.width / n, mid = r.height / 2, played = m === cur ? au.currentTime / m.dur : 0;
+    for (let i = 0; i < n; i++) {
+      const hh = Math.max(0.04, m.env[i]) * (r.height - 4) / 2;
+      ctx.fillStyle = i / n < played ? hot : fg; ctx.globalAlpha = i / n < played ? 1 : 0.5;
+      ctx.fillRect(i * bw + bw * 0.18, mid - hh, Math.max(1, bw * 0.64), hh * 2);
+    }
+    ctx.globalAlpha = 1;
+    m.clock.textContent = (m === cur ? mmss(au.currentTime) + ' / ' : '') + mmss(m.dur);
+  }
+  function tick() { cancelAnimationFrame(raf2); const s = () => { if (cur) paint(cur); if (!au.paused) raf2 = requestAnimationFrame(s); }; raf2 = requestAnimationFrame(s); }
+  function play(m, t) {
+    TRACKS.forEach(o => { if (o.playing) o.audio.pause(); });
+    if (cur !== m) { if (cur) { const o = cur; cur = null; o.btn.textContent = 'Play'; paint(o); } cur = m; au.src = m.file; }
+    const go = () => { try { au.currentTime = t; } catch (e) {} au.play().catch(() => { m.clock.textContent = 'did not load'; }); };
+    if (au.readyState > 0) go(); else { au.addEventListener('loadedmetadata', go, { once: true }); au.load(); }
+  }
+  au.addEventListener('play', () => { if (cur) cur.btn.textContent = 'Pause'; tick(); });
+  au.addEventListener('pause', () => { if (cur) { cur.btn.textContent = 'Play'; paint(cur); } });
+  TRACKS.forEach(o => o.audio.addEventListener('play', () => { if (!au.paused) au.pause(); }));
+  MORE.forEach(m => {
+    const el = document.createElement('article'); el.className = 'slip';
+    el.innerHTML = '<div class="row1"><span class="t"></span><span class="zh"></span><span class="meta"></span></div><p></p><div class="player"><button type="button">Play</button><canvas tabindex="0" role="slider" aria-valuemin="0"></canvas><span class="clock"></span></div>';
+    el.querySelector('.t').textContent = m.en; el.querySelector('.zh').textContent = m.zh; el.querySelector('.meta').textContent = m.meta; el.querySelector('p').textContent = m.note;
+    m.btn = el.querySelector('button'); m.cv = el.querySelector('canvas'); m.clock = el.querySelector('.clock');
+    m.cv.setAttribute('aria-label', 'Position in ' + m.en); m.cv.setAttribute('aria-valuemax', String(Math.round(m.dur)));
+    m.btn.addEventListener('click', () => { if (cur === m && !au.paused) au.pause(); else if (cur === m && au.currentTime > 0 && au.currentTime < m.dur - 0.3) au.play(); else play(m, 0); });
+    m.cv.addEventListener('click', e => { const r = m.cv.getBoundingClientRect(); play(m, Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * m.dur); });
+    m.cv.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); play(m, Math.max(0, (m === cur ? au.currentTime : 0) + (e.key === 'ArrowRight' ? 5 : -5))); } });
+    host.appendChild(el); new ResizeObserver(() => paint(m)).observe(m.cv);
+  });
+})();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => TRACKS.forEach(tr => tr.render()));
+TRACKS.forEach(tr => tr.render());
+setTimeout(loadXY, 400);
+</script>
+
+</body></html>

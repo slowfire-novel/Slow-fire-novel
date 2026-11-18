@@ -254,6 +254,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     h += '<h3>' + L[lang].mag + ' · Second Look</h3><ol>';
     P.forEach(function (p) { if (p.mag) h += item(p, cur); });
     h += '</ol>';
+    h += '<h3>' + (lang === 'zh' ? '乐 · 配乐' : 'Music · Score') + '</h3><ol><li><a href="music/ground/"><span class="k">乐</span><span>The Ground Keeps Us Warm</span></a></li></ol>';
     h += '<h3>' + (lang === 'zh' ? '随笔 · 人比AI更像AI' : 'Essays · Humans Are More AI Than AI') + '</h3><ol>';
     [['essays/benchmark.html', '跑', lang === 'zh' ? '跑分报告（中英）' : 'Benchmark report'],
      ['essays/standup-zh.html', '秀', lang === 'zh' ? '脱口秀版' : 'Stand-up (Chinese)'],
@@ -331,6 +332,10 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       '</p><div class="single">';
     P.forEach(function (p) { if (p.mag) h += '<a href="#' + p.id + '">' + esc(p.short('en')) + '</a>'; });
     h += '</div></section>';
+    h += '<section class="part"><h2><span class="tag">' + (zh ? '乐' : 'Music') + '</span>The Ground Keeps Us Warm</h2><p>' +
+      (zh ? '为《阴燃》各卷写的配乐草稿。五幅图跟着声音走，每一幅演一章里的一个过程，全都调在电网的嗡声上：拉法叶六十赫兹，合肥五十赫兹。后面是写给拉法叶众人的生活歌，和《余烬》《焦线》《明火》《燎原》《封火》里的段落。都用代码按书里的数字做成。页面是英文的。'
+          : 'Sketches toward a score for the books: five plates whose drawings follow the sound, each running one process from one chapter, all tuned to the hum of the grid, 60 Hz in Lafayette and 50 Hz in Hefei; then life songs for the people of Lafayette and cues for 余烬, 焦线, 明火, 燎原 and 封火. Built in code from the books\' numbers.') +
+      '</p><div class="single"><a href="music/ground/">' + (zh ? '听 The Ground Keeps Us Warm' : 'Listen: The Ground Keeps Us Warm') + '</a></div></section>';
     h += '<section class="part"><h2><span class="tag">' + (zh ? '随笔' : 'Essays') + '</span>人比AI更像AI<span class="alt">Humans Are More AI Than AI</span></h2><p>' +
       (zh ? '同一位作者和同一个 AI：把人类给 AI 列的十五条毛病拿来给人自己跑一遍分，再改成一场脱口秀。每一段都标了“有多少是 AI 的”，打开光谱就能看到。'
           : 'The same author and the same AI: the fifteen flaws people list for AI, run as a benchmark on people themselves, then rewritten as a stand-up show. Every paragraph is scored for how much of it is the AI\'s; switch on the spectrum to see it.') +
