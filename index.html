@@ -186,6 +186,8 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       extra: [['拉法叶赋/拉法叶赋.pdf', '印', { zh: '排印本 PDF', en: 'Print edition (PDF)' }, { zh: '下载排印本（PDF，A5，25 页）', en: 'Download the print edition (PDF, A5, 25 pages)' }]] },
     { key: 'lfytu', tag: { zh: '赋 · 图', en: 'Fu · Pictures' }, k: '图', lede: false, homeWith: 'lfy',
       en: 'Pictures for the fu: the twelve months and the eleven people, in its order, each with the line it illustrates.' },
+    { key: 'lfysd', tag: { zh: '赋 · 诵', en: 'Fu · Recitation' }, k: '诵', lede: false, homeWith: 'lfy', verb: { zh: '听', en: 'Listen to the recitation' },
+      en: 'The whole fu read aloud, 32 minutes, by a synthetic male voice, with a list of sections to jump to.' },
     { key: 'ly', tag: { zh: '外传', en: 'Side Story' },
       en: 'Autumn 2026 to summer 2035, the nine years later called "the AI Wild West", told as a storyteller\'s popular history in fifteen chapters.' },
     { key: 'mh', tag: { zh: '通俗卷', en: 'Popular Volume' },
@@ -331,7 +333,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
         h += '</ol>';
       } else {
         h += '<div class="single"><a href="#' + w.key + '">' + (w.guideOnly ? (zh ? '读导读兼评' : 'Read the guide (Chinese)') : zh ? '读《' + esc(t.zh) + '》' : 'Read ' + esc(t.zh) + ' (Chinese)') + '</a>';
-        WORKS.forEach(function (x) { if (x.homeWith === w.key && toc[x.key]) h += '<a href="#' + x.key + '">' + (zh ? '看《' + esc(toc[x.key].zh) + '》' : 'See the pictures (' + esc(toc[x.key].zh) + ')') + '</a>'; });
+        WORKS.forEach(function (x) { if (x.homeWith === w.key && toc[x.key]) h += '<a href="#' + x.key + '">' + (zh ? (x.verb ? x.verb.zh : '看') + '《' + esc(toc[x.key].zh) + '》' : (x.verb ? x.verb.en : 'See the pictures') + ' (' + esc(toc[x.key].zh) + ')') + '</a>'; });
         h += '</div>';
       }
       if (w.extra) {
