@@ -1,0 +1,37 @@
+# 阴燃 · The Slow Fire
+# © 2026 李星光 (Li Xingguang). All rights reserved. Terms: the site's #rights page.
+#
+# Search engines are welcome. Collection for AI training is not: the groups below
+# name the crawlers and tokens that gather text for model training. Crawlers that
+# fetch a page for search or at a reader's request are left alone.
+#
+# NOTE FOR WHOEVER PUBLISHES THIS: crawlers read robots.txt only at the root of a
+# host. On a GitHub Pages project site (https://<name>.github.io/<repository>/)
+# this file is served one level too deep and is ignored. It takes effect when
+# (a) the site gets a custom domain, or (b) a copy is placed in the account's root
+# site repository, the one named <name>.github.io.
+
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: meta-externalagent
+User-agent: FacebookBot
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: Diffbot
+User-agent: omgili
+User-agent: omgilibot
+User-agent: AI2Bot
+User-agent: ImagesiftBot
+User-agent: PanguBot
+User-agent: ChatGLM-Spider
+User-agent: Timpibot
+User-agent: img2dataset
+Disallow: /
+
+User-agent: *
+Allow: /

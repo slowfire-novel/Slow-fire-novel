@@ -12,7 +12,7 @@ A static site with no build step: `index.html` loads `toc.json` and the chapter 
 Notes for whoever publishes this:
 - Do not rename or move `txt/`, `img/` or `toc.json`; the page fetches them by relative path.
 - Opening `index.html` straight from disk (file://) will not load chapters, because browsers block `fetch` there. Test with a local server instead: `python3 -m http.server` in this folder, then open http://localhost:8000.
-- Pages are addressed by hash, for example `#v1-01`, `#v2-44`, `#jx`, `#guide`, `#preface`, `#mag-2`, `#afterword`.
+- Pages are addressed by hash, for example `#v1-01`, `#v2-44`, `#jx`, `#guide`, `#preface`, `#mag-2`, `#afterword`, `#rights`.
 - The notes switch (注释) and language choice are remembered in the reader's browser via localStorage.
 - Fonts come from Google Fonts; everything else is in this folder.
 
@@ -25,3 +25,14 @@ Also here: `火候/`, 《火候》 in its public 洁本 edition: 上部 (chapter
 Also here: `拉法叶赋/`, 《拉法叶赋（并序）》: the text (`正文.md`, one paragraph per line: 序, 25 paragraphs of 赋, 4 lines of 乱曰), the 27 notes (`注.md`), the list of works it borrows from (`致敬篇目.md`) and the A5 print edition (`拉法叶赋.pdf`, 23 pages). `tools/lfy_site.py` turns them into `txt/lfy-zh.html` and the `lfy` entry in `toc.json`: run `python3 tools/lfy_site.py` in this folder after any change there.
 
 `tools/huohou_site.py` puts the 《火候》 clean edition on the reading site from `火候/`: run `python3 tools/huohou_site.py 火候` in this folder after any change to a chapter there. It writes `txt/huohou-NN-zh.html` and `img/huohou_NN_K.webp` and updates the `huohou` entry in `toc.json`.
+
+## Rights
+
+© 2026 李星光 (Li Xingguang). All rights reserved. 保留所有权利。This repository is public so that the books can be read; it is not open source. See [LICENSE.md](LICENSE.md). Requests go to [Issues](https://github.com/slowfire-novel/Slow-fire-novel/issues).
+
+Where the rights statement lives, for whoever maintains this:
+- The terms readers see are the `#rights` page: `txt/rights-zh.html` and `txt/rights-en.html`. `index.html` prints the © line under every page (`OWNER`, `YEAR` and `foot()` in its script) and links to that page from the contents rail.
+- The standalone pages carry the © line by hand: the three in `essays/`, the two in `music/`, and the two character graphs in `火候/`. If one of them is rebuilt or re-exported, put the line and the three `<meta>` tags back.
+- Every page has `<meta name="robots" content="noai, noimageai">` and `<meta name="tdm-reservation" content="1">`: an opt-out from AI training and from text and data mining that leaves search engines alone. These are requests; a crawler may ignore them.
+- `robots.txt` names the AI-training crawlers. Crawlers read it only at the root of a host, so on a project site (`https://<name>.github.io/<repository>/`) it does nothing. It takes effect with a custom domain, or when a copy is placed in the account's root site repository (the one named `<name>.github.io`).
+- The print-edition PDFs do not carry a copyright page yet; add one at their next rebuild.
