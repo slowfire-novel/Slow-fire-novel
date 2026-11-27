@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="《阴燃》The Slow Fire：一部写记忆的科幻小说，两卷四十四章，中英文；续篇《焦线》；导读；附刊 Second Look。">
+<meta name="author" content="李星光">
+<meta name="copyright" content="© 2026 李星光 (Li Xingguang). 保留所有权利。All rights reserved.">
+<!-- Rights: see #rights. Search engines are welcome; collection for AI training and text-and-data mining is reserved. -->
+<meta name="robots" content="noai, noimageai">
+<meta name="tdm-reservation" content="1">
+<link rel="license" href="#rights">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>阴燃 · The Slow Fire</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -136,6 +142,10 @@ html[lang="zh-CN"] .body p { text-align: justify; }
 .pager a:hover { color: var(--ember); }
 .pager .next { text-align: right; grid-column: 2; }
 .loading { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+/* the © line under every page; the terms themselves are the #rights page */
+.rights { margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem; font-family: var(--mono); font-size: 12px; line-height: 1.6; color: var(--muted); }
+.rights a { color: inherit; }
+.pager + .rights { margin-top: 1.4rem; border-top: 0; padding-top: 0; }
 
 @media (max-width: 860px) {
   .shell { grid-template-columns: minmax(0, 1fr); }
@@ -175,6 +185,12 @@ html[lang="zh-CN"] .body p { text-align: justify; }
   };
   var VOL = { v1: { zh: '阴燃', en: 'The Slow Fire' }, v2: { zh: '余烬', en: 'Embers' } };
   var MAGNAME = ['Nov/Dec 2046 issue', 'The Sixty-Seven', 'Jan/Feb 2065 issue'];
+  // The © line and the rights page (#rights, txt/rights-zh.html and txt/rights-en.html). Change the name or year here and in those two files.
+  var OWNER = { zh: '李星光', en: '李星光 (Li Xingguang)' }, YEAR = '2026';
+  var RIGHTS = { zh: { title: '版权与转载', crumb: '版权', line: '保留所有权利' }, en: { title: 'Rights and Permissions', crumb: 'Rights', line: 'All rights reserved' } };
+  function foot(noLink) {
+    return '<footer class="rights">© ' + YEAR + ' ' + OWNER[lang] + ' · ' + RIGHTS[lang].line + (noLink ? '' : ' · <a href="#rights">' + RIGHTS[lang].title + '</a>') + '</footer>';
+  }
   // Chinese-only companion works; each shows only if toc.json lists it
   var WORKS = [
     { key: 'fh', tag: { zh: '前传', en: 'Prequel' }, k: '前', notes: true,
@@ -279,6 +295,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       h += '<li><a href="' + e[0] + '"><span class="k">' + e[1] + '</span><span>' + esc(e[2]) + '</span></a></li>';
     });
     h += '</ol>';
+    h += '<h3>' + RIGHTS[lang].crumb + '</h3><ol><li><a href="#rights"' + (cur === 'rights' ? ' aria-current="page"' : '') + '><span class="k">©</span><span>' + RIGHTS[lang].title + '</span></a></li></ol>';
     document.getElementById('rail').innerHTML = h;
   }
   function label(p) {
@@ -361,7 +378,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       '</p><div class="single"><a href="essays/benchmark.html">' + (zh ? '跑分报告（中文 · English）' : 'Benchmark report (Chinese · English)') + '</a>' +
       '<a href="essays/standup-zh.html">' + (zh ? '脱口秀版（中文）' : 'Stand-up edition (Chinese)') + '</a>' +
       '<a href="essays/standup-en.html">' + (zh ? 'Stand-Up Edition（英文）' : 'Stand-Up Edition (English)') + '</a></div></section>';
-    h += '</div></div>';
+    h += '</div>' + foot() + '</div>';
     document.getElementById('main').innerHTML = h;
     rail('');
     document.title = '阴燃 · The Slow Fire';
@@ -388,7 +405,7 @@ html[lang="zh-CN"] .body p { text-align: justify; }
       return '<a class="' + cls + '" href="#' + q.id + '"><span>' + L[lang][word] + '</span>' + esc(q.title(ql)) + '</a>';
     }
     var h = '<div class="col">' + controls(p) + '<article' + (p.notes && notesOn && l === 'zh' ? ' class="notes-on"' : '') + '><p class="crumb">' + esc(p.crumb(lang)) + '</p><h1>' + esc(p.title(l)) + '</h1>' + notice +
-      '<div class="body"><p class="loading">…</p></div></article><nav class="pager" aria-label="' + L[lang].contents + '">' + pl(prev, 'prev', 'prev') + pl(next, 'next', 'next') + '</nav></div>';
+      '<div class="body"><p class="loading">…</p></div></article><nav class="pager" aria-label="' + L[lang].contents + '">' + pl(prev, 'prev', 'prev') + pl(next, 'next', 'next') + '</nav>' + foot() + '</div>';
     var main = document.getElementById('main');
     main.innerHTML = h;
     document.title = p.title(l) + ' · 阴燃';
@@ -405,10 +422,28 @@ html[lang="zh-CN"] .body p { text-align: justify; }
     });
   }
 
+  // #rights: the terms, in both languages; outside the reading order, so it has no pager
+  function rightsPage() {
+    var want = lang, main = document.getElementById('main');
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    rail('rights');
+    main.innerHTML = '<div class="col">' + controls({ langs: ['zh', 'en'] }) + '<article><p class="crumb">' + RIGHTS[lang].crumb + '</p><h1>' + RIGHTS[lang].title + '</h1>' +
+      '<div class="body"><p class="loading">…</p></div></article>' + foot(true) + '</div>';
+    document.title = RIGHTS[lang].title + ' · 阴燃';
+    load('txt/rights-' + want + '.html').then(function (t) {
+      var b = main.querySelector('.body');
+      if (b && lang === want && location.hash === '#rights') b.innerHTML = t;
+    }).catch(function () {
+      var b = main.querySelector('.body');
+      if (b) b.innerHTML = '<p class="notice">' + (lang === 'zh' ? '这一篇没能载入。请检查网络后刷新页面。' : 'This text did not load. Check your connection and reload the page.') + '</p>';
+    });
+  }
+
   var pendingAfterword = false;
   function route() {
     closeRail();
     var id = (location.hash || '').replace(/^#/, '');
+    if (id === 'rights') { rightsPage(); window.scrollTo(0, 0); return; }
     if (id === 'afterword') { pendingAfterword = true; id = 'guide'; }
     if (/^hj-\d\d$/.test(id)) id = 'huohou-' + id.slice(3);
     var i = find(id);
